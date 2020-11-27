@@ -3,7 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import bridge from '@vkontakte/vk-bridge';
+ 
+// Sends event to client
+bridge.send('VKWebAppInit');
+ 
+// Subscribes to event, sended by client
+bridge.subscribe(e => console.log(e));
 ReactDOM.render(
   <React.StrictMode>
     <App />
