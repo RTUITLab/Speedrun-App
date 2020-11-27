@@ -13,6 +13,10 @@
     "@vkontakte/icons": "^1.59.0",
     "@vkontakte/vk-bridge": "^2.3.0",
     "@vkontakte/vkui": "^3.13.2",
+    "node-fetch": "^2.6.1",
+    "node-speedrun": "^1.2.0",
+    "openapi-client-axios": "^3.7.8",
+    "openapi-client-axios-typegen": "^1.1.9",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "4.0.1",
@@ -20,10 +24,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "cross-env PORT=10888 BROWSER=none HTTPS=true react-scripts start",
+    "start": "npm run genApi && cross-env PORT=10888 BROWSER=none HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "genApi": "node generateApi.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^7.0.2"
+    "cross-env": "^7.0.2",
+    "openapi-typescript-codegen": "^0.7.0-beta-3"
   }
 }
