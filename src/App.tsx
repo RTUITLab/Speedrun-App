@@ -3,6 +3,7 @@ import bridge, { UpdateConfigData, UserInfo } from '@vkontakte/vk-bridge';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
+import { OpenAPI } from './api/core/OpenAPI';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
@@ -14,18 +15,22 @@ const App = () => {
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
 
 	useEffect(() => {
-		bridge.subscribe(({ detail: { type, data }}) => {
+		bridge.subscribe(({ detail: { type, data } }) => {
 			if (type === 'VKWebAppUpdateConfig') {
-        const schemeAttribute = document.createAttribute('scheme');
-        const configData = data as UpdateConfigData;
+				const schemeAttribute = document.createAttribute('scheme');
+				const configData = data as UpdateConfigData;
 				schemeAttribute.value = configData.scheme ? configData.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
 		async function fetchData() {
-      const user = await bridge.send('VKWebAppGetUserInfo');
-        setUser((s) => user);
-        setPopout(null);
+			const user = await bridge.send('VKWebAppGetUserInfo');
+			setUser((s) => user);
+			console.log(user);
+			OpenAPI.HEADERS = {
+				'UserId': user.id+''
+			};
+			setPopout(null);
 		}
 		fetchData();
 	}, []);
