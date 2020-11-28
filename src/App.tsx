@@ -291,14 +291,6 @@ const App = () => {
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' goTo={goTo}/>
-				<GamesList
-					id='gameList'
-					sort={sort}
-					platform={platform}
-					unofficial={unofficial}
-					setActiveModal={setActiveModal}
-					goBack={goBack}
-				/>
 			</View>
 			<View id="persik" activePanel="persik" popout={popout}>
 				<Persik id='persik' go={goBack}/>
