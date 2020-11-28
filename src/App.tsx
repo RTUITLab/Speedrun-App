@@ -236,23 +236,21 @@ const App = () => {
 						<option value="ZXSpectrum" data-id="">ZXSpectrum</option>
 					</Select>
 					<Select
-						top="Сортировать по"
+						top="Сортировать"
 						placeholder="Выбрать порядок отображения"
 						value={sort}
 						name="sort"
 						onChange={onChange}
 					>
-						<option value="title">Sort by title</option>
-						<option value="oldest">Sort by oldest</option>
-						<option value="newest">Sort by newest</option>
-						<option value="mostactive">Sort by most active</option>
-						<option value="leastactive">Sort by least active</option>
-						<option value="mostplayers">Sort by most players</option>
-						<option value="fewestplayers">Sort by fewest players</option>
-						<option value="mostruns">Sort by most runs</option>
-						<option value="fewestruns">Sort by fewest runs</option>
-						<option value="latestadded">Sort by latest added</option>
-						<option value="earliestadded">Sort by earliest added</option>
+						<option value="title">По алфвиту</option>
+						<option value="oldest">Сначала новые</option>
+						<option value="newest">Сначала старые</option>
+						<option value="mostactive">Самые активные</option>
+						<option value="leastactive">Самые пасивные</option>
+						<option value="mostplayers">Больше всего игроков</option>
+						<option value="fewestplayers">Меньше всего игроков</option>
+						<option value="mostruns">Большее число ранов</option>
+						<option value="fewestruns">Меньшее число ранов</option>
 					</Select>
 					<Checkbox name="unofficial" value={unofficial+''} onChange={onChange}>
 						Неофициальные релизы игр
