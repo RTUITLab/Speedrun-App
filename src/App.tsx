@@ -8,7 +8,7 @@ import Persik from './panels/Persik';
 import GamesList from './panels/GamesList';
 
 const App = () => {
-	const [activePanel, setActivePanel] = useState('gameList');
+	const [activePanel, setActivePanel] = useState('persik');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
 
 	useEffect(() => {
@@ -50,7 +50,7 @@ const App = () => {
 			<GamesList id='gameList' />
 		</View>
 			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='gameList' go={go} />
+				<Persik id='persik' go={go} />
 			</View>
 		</Epic>
 	);
