@@ -9,7 +9,7 @@ import type { GameCompact } from '../api/models/GameCompact';
 import { Icon24Filter } from '@vkontakte/icons';
 
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+import './GameList.css'
 import { FavoriteService } from '../services/FavoritesService';
 
 type GamesListProps = {

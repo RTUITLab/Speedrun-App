@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { OpenAPI } from './api/core/OpenAPI';
 import { FavoriteService } from './services/FavoritesService';
 
