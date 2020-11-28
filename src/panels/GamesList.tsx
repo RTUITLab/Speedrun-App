@@ -47,7 +47,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
     }
 
     onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({gameTitle: e.target.value});
+        this.setState({gameTitle: e.target.value.toLowerCase()});
     };
 
     render() {
