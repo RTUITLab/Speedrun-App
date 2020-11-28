@@ -7,7 +7,7 @@ import bridge from '@vkontakte/vk-bridge';
 
 import { OpenAPI } from './api/core/OpenAPI';
 
-OpenAPI.BASE = "https://192.168.2.61:5001";
+OpenAPI.BASE = process.env.REACT_APP_BACKEND_URL || 'https://localhost:5001';
 
 // Sends event to client
 bridge.send('VKWebAppInit');

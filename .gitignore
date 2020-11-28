@@ -27,3 +27,4 @@ src/api
 .idea/
 
 *.zip
+.env.production
