@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
 import {LeaderBoardsService, Leaderboard, GamesService, Category} from '../../api';
-
+import './Table.css'
 
 import {useTable} from 'react-table'
 
@@ -21,7 +21,7 @@ function Table({columns, data}) {
 
     // Render the UI for your table
     return (
-        <table {...getTableProps()}>
+        <table {...getTableProps()} id='customers'>
             <thead>
             {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
