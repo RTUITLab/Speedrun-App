@@ -87,7 +87,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                                 <SwipeableListItem
                                     key={g.id}
                                     swipeRight={{
-                                        content: <Cell>Add to favorite</Cell>,
+                                        content: <Cell>Добавить в избранное</Cell>,
                                         action: () => this.addGameToFavorites(g.id || "")
                                     }}
                                     >
