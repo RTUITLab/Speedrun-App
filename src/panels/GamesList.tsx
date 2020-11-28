@@ -32,8 +32,8 @@ const GamesList = props => {
 
     return (
         <Panel id={props.id}>
-            <PanelHeader left={<PanelHeaderButton onClick={() => props.setActiveModal('filter')}><Icon24Filter /></PanelHeaderButton>}>Игры</PanelHeader>
-            <Search onChange={onChange} />
+            <PanelHeader>Игры</PanelHeader>
+            <Search onChange={onChange} icon={<Icon24Filter />} onIconClick={() => props.setActiveModal('filter')} />
             <List>
                 {gList.length > 0  &&
                 gList.map(g =>
