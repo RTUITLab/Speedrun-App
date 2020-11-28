@@ -1,4 +1,4 @@
-import React, {FunctionComponent, HTMLAttributes, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
@@ -7,42 +7,11 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import CardGrid from '@vkontakte/vkui/dist/components/CardGrid/CardGrid';
 import Card from '@vkontakte/vkui/dist/components/Card/Card';
 import Header from '@vkontakte/vkui/dist/components/Header/Header';
-import usePlatform from '@vkontakte/vkui/dist/hooks/usePlatform';
-import {ANDROID, classNames, getClassName, Avatar, Cell, HorizontalScroll, CardScroll} from '@vkontakte/vkui'
+import {Avatar, Cell, CardScroll, Search} from '@vkontakte/vkui'
 
 import './Persik.css';
 import mc from '../img/MineCraft.jpg';
-import {GameCompact, GamesService, Stream, StreamsService} from "../api";
-
-export interface TextProps extends HTMLAttributes<HTMLElement> {
-    weight: 'regular' | 'medium' | 'semibold';
-}
-
-
-const Text: FunctionComponent<TextProps> = ({
-                                                children,
-                                                className,
-                                                weight,
-                                                ...restProps
-                                            }) => {
-    const platform = usePlatform();
-
-    let textWeight: TextProps['weight'] = weight;
-
-    if (platform === ANDROID) {
-        if (weight === 'semibold') {
-            textWeight = 'medium';
-        }
-    }
-    return (
-        <div
-            {...restProps}
-            className={classNames(getClassName('Text', platform), `Text--w-${textWeight}`, className)}
-        >
-            {children}
-        </div>
-    );
-}
+import {Stream, StreamsService} from "../api";
 
 const StartPage = props => {
     const [streamsList, setStreamsList] = useState<Array<Stream> | null>(null)
@@ -64,6 +33,7 @@ const StartPage = props => {
                 Обзор спидранов
             </PanelHeader>
 
+            <Search onClick={e => props.goTo('gameList')} />
 
             <Group separator="hide">
                 <CardGrid>
@@ -130,7 +100,7 @@ const StartPage = props => {
                     streamsList.map(s =>
                         <Card key={s.id} size="s">
                             <div style={{width: 224, height: 225}}>
-                                <img style={{objectFit: "cover", borderRadius: 5, width: 224, height: 135}} src={s?.previewImage || mc}/>
+                                <img alt='previewImg' style={{objectFit: "cover", borderRadius: 5, width: 224, height: 135}} src={s?.previewImage || mc}/>
                                 <Cell style={{marginTop: 0, marginLeft: 3}} before={<Avatar mode="image" src={s?.gameCoverImage || mc}/>}>
                                     <div style={{width: "100$", textAlign: "left"}}>
                                         <div style={{fontSize: "16px"}}>{s.nickName}</div>
@@ -178,7 +148,7 @@ const StartPage = props => {
 
 StartPage.propTypes = {
     id: PropTypes.string.isRequired,
-    go: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired
 };
 
 export default StartPage;
