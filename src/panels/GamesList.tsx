@@ -10,6 +10,7 @@ import { Icon24Filter } from '@vkontakte/icons';
 
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+import { FavoriteService } from '../services/FavoritesService';
 
 type GamesListProps = {
     id: string,
@@ -54,6 +55,19 @@ class GamesList extends Component<GamesListProps, GamesListState> {
         this.setState({ activeView: str });
     }
 
+    async addGameToFavorites(id: string): Promise<void> {
+        const favoriteGames = await FavoriteService.getFavoriteGameIds();
+        const onlyUnique = (value, index, self) => {
+            return self.indexOf(value) === index;
+        }
+        const newList = [...favoriteGames, id].filter(onlyUnique);
+        await FavoriteService.setFavoriteGames(newList);
+        const saved = await FavoriteService.getFavoriteGameIds();
+        console.log("saved");
+        
+        console.log(saved);
+    }
+
     render() {
         return (
             <View id={this.props.id} activePanel={this.state.activeView}>
@@ -74,7 +88,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                                     key={g.id}
                                     swipeRight={{
                                         content: <Cell>Add to favorite</Cell>,
-                                        action: () => console.info('swipe action triggered')
+                                        action: () => this.addGameToFavorites(g.id || "")
                                     }}
                                     >
 
