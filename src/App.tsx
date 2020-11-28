@@ -1,36 +1,38 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import bridge, { UpdateConfigData, UserInfo } from '@vkontakte/vk-bridge';
+import React, { useState, useEffect } from 'react';
+import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
+import { OpenAPI } from './api/core/OpenAPI';
 
-//import Modals from './panels/Modals';
-import Home from './panels/Home';
+import GamesList from './panels/GamesList';
 import { Button, CellButton, Checkbox, FormLayout, Input, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Select } from '@vkontakte/vkui';
 import { Icon24Add, Icon24Cancel } from '@vkontakte/icons';
 
 const App = () => {
-	const [activePanel, setActivePanel] = useState('home');
+	const [activePanel, setActivePanel] = useState('gameList');
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
 	const [platform, setPlatform]: [any, Dispatch<SetStateAction<any>>] = useState(null);
 	const [sort, setSort]: [any, Dispatch<SetStateAction<any>>] = useState(null);
 	const [unoficial, setUnoficial]: [any, Dispatch<SetStateAction<any>>] = useState(false);
-	const [fetchedUser, setUser] = useState<UserInfo | null>(null);
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
 
 	useEffect(() => {
-		bridge.subscribe(({ detail: { type, data }}) => {
+		bridge.subscribe(({ detail: { type, data } }) => {
 			if (type === 'VKWebAppUpdateConfig') {
-        const schemeAttribute = document.createAttribute('scheme');
-        const configData = data as UpdateConfigData;
+				const schemeAttribute = document.createAttribute('scheme');
+				const configData = data as UpdateConfigData;
 				schemeAttribute.value = configData.scheme ? configData.scheme : 'client_light';
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
 		async function fetchData() {
-      const user = await bridge.send('VKWebAppGetUserInfo');
-        setUser((s) => user);
-        setPopout(null);
+			const user = await bridge.send('VKWebAppGetUserInfo');
+
+			OpenAPI.HEADERS = {
+				'UserId': user.id+''
+			};
+			setPopout(null);
 		}
 		fetchData();
 	}, []);
@@ -102,10 +104,7 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout} modal={modals}>
-			<Panel id="home">
-				<PanelHeader>{platform}</PanelHeader>
-				<Button onClick={() => setActiveModal('filter')}></Button>
-			</Panel>
+			<GamesList id='gameList' />
 		</View>
 	);
 }

@@ -4,7 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import bridge from '@vkontakte/vk-bridge';
- 
+
+import { OpenAPI } from './api/core/OpenAPI';
+
+OpenAPI.BASE = "https://192.168.2.61:5001";
+
 // Sends event to client
 bridge.send('VKWebAppInit');
 
