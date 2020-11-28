@@ -1,5 +1,5 @@
-import { Icon16Play, Icon20SlidersOutline, Icon24Dropdown, Icon24Flash } from "@vkontakte/icons";
-import { Avatar, Caption, Cell, Div, FixedLayout, Group, Header, Headline, HorizontalScroll, List, Panel, PanelHeader, Tabs, TabsItem, Text } from "@vkontakte/vkui";
+import { Icon16Play, Icon24Dropdown } from "@vkontakte/icons";
+import { Avatar, Caption, Cell, Div, Group, Header, HorizontalScroll, Panel, PanelHeader, Tabs, TabsItem, Text } from "@vkontakte/vkui";
 import { useEffect, useState } from "react";
 
 const Tournaments = ({id, go}) => {
