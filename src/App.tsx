@@ -4,8 +4,10 @@ import {View, ScreenSpinner, Epic, Tabbar, TabbarItem} from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api/core/OpenAPI';
 
+import GamesList from './panels/GamesList';
 import Persik from './panels/Persik';
-import StartPage from './panels/StartPage';
+import StartPage from "./panels/StartPage";
+
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState('startPage');
@@ -44,6 +46,7 @@ const App = () => {
 			<Tabbar>
 				<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList"/>
 				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage"} text="Лента" data-story="startPage"/>
 			</Tabbar>
 		}>
 		<View id="gameList" activePanel="gameList" popout={popout}>
@@ -51,6 +54,9 @@ const App = () => {
 		</View>
 			<View id="persik" activePanel="persik" popout={popout}>
 				<Persik id='gameList' go={go} />
+			</View>
+			<View id="startPage" activePanel="startPage" popout={popout}>
+				<StartPage id='startPage' go={go} />
 			</View>
 		</Epic>
 	);
