@@ -11,7 +11,7 @@ const GamesList = props => {
     useEffect(() => {
         async function fetchGamesList() {
             if (gamesList == null) {
-                const data = await GamesService.getGamesService1();
+                const data = await GamesService.getCompactGames();
                 setGamesList(() => data);
             }
         }
