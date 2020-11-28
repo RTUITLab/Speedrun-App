@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
-import View from '@vkontakte/vkui/dist/components/View/View';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
+import {View, ScreenSpinner, Epic, Tabbar, TabbarItem} from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api/core/OpenAPI';
 
@@ -36,11 +35,24 @@ const App = () => {
 		setActivePanel(e.currentTarget.dataset.to);
 	};
 
+	const setStore = e => {
+		setActivePanel(e.currentTarget.dataset.story);
+	}
+
 	return (
-		<View activePanel={activePanel} popout={popout}>
-			<Persik id='persik' go={go} />
+		<Epic activeStory={activePanel} tabbar={
+			<Tabbar>
+				<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList"/>
+				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
+			</Tabbar>
+		}>
+		<View id="gameList" activePanel="gameList" popout={popout}>
 			<GamesList id='gameList' />
 		</View>
+			<View id="persik" activePanel="persik" popout={popout}>
+				<Persik id='gameList' go={go} />
+			</View>
+		</Epic>
 	);
 }
 
