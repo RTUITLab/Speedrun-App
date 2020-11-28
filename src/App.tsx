@@ -9,17 +9,13 @@ import GamesList from './panels/GamesList';
 import Persik from './panels/Persik';
 import StartPage from "./panels/StartPage";
 import { Icon24Cancel } from '@vkontakte/icons';
-import { PlatformsService } from './api/services/PlatformsService';
-import { Platform } from './api/models/Platform';
-
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
-	const [platform, setPlatform]: [any, Dispatch<SetStateAction<any>>] = useState(null);
+	const [platform, setPlatform]: [any, Dispatch<SetStateAction<any>>] = useState("");
 	const [sort, setSort]: [string | null, Dispatch<SetStateAction<any>>] = useState("mostactive");
 	const [unofficial, setUnofficial]: [boolean, Dispatch<SetStateAction<any>>] = useState(false);
 	const [activePanel, setActivePanel] = useState('startPage');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
-	const [platforms, setPlatforms] = useState<Array<Platform> | null>(null);
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data } }) => {
@@ -39,13 +35,6 @@ const App = () => {
 			setPopout(null);
 		}
 		fetchData();
-		async function getPlatforms() {
-			if (platforms == null) {
-				const platforms = await PlatformsService.getPlatforms();
-				setPlatforms(() => platforms);
-			}
-		}
-		getPlatforms();
 	}, []);
 
 	const closeModal = () => {
