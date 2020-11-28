@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import logo from '../logo.svg'
-import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderButton} from '@vkontakte/vkui';
+import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack} from '@vkontakte/vkui';
 
 import {GamesService} from '../api/services/GamesService';
 import type { GameCompact } from '../api/models/GameCompact';
@@ -32,8 +32,13 @@ const GamesList = props => {
 
     return (
         <Panel id={props.id}>
-            <PanelHeader>Игры</PanelHeader>
-            <Search onChange={onChange} icon={<Icon24Filter />} onIconClick={() => props.setActiveModal('filter')} />
+
+            <PanelHeader
+                left={<PanelHeaderBack onClick={props.goBack} data-to="startPage" />}>
+                Игры
+            </PanelHeader>
+            <Search autoFocus onChange={onChange} icon={<Icon24Filter/>}
+                    onIconClick={() => props.setActiveModal('filter')}/>
             <List>
                 {gList.length > 0  &&
                 gList.map(g =>
@@ -53,7 +58,8 @@ GamesList.propTypes = {
     setActiveModal: PropTypes.func,
     sort: PropTypes.string,
     platform: PropTypes.string,
-    unoficial: PropTypes.bool
+    unoficial: PropTypes.bool,
+    goBack: PropTypes.func.isRequired
 }
 
 export default GamesList;

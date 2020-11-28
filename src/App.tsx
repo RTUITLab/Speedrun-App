@@ -2,8 +2,8 @@ import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import {View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, ModalPageHeader, PanelHeaderButton, FormLayout, Select, Checkbox, Button} from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
-import { OpenAPI } from './api/core/OpenAPI';
-import Icon28GameOutline from '@vkontakte/icons/dist/28/game_outline';
+import { OpenAPI } from './api';
+
 import Icon28TextLiveOutline from '@vkontakte/icons/dist/28/text_live_outline';
 import GamesList from './panels/GamesList';
 import Persik from './panels/Persik';
@@ -64,8 +64,12 @@ const App = () => {
 		closeModal();
 	};
 
-	const go = e => {
+	const goBack = e => {
 		setActivePanel(e.currentTarget.dataset.to);
+	};
+
+	const goTo = (str: string) => {
+		setActivePanel(str);
 	};
 
 	const setStore = e => {
@@ -113,12 +117,12 @@ const App = () => {
 	return (
 		<Epic activeStory={activePanel} tabbar={
 			<Tabbar>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage"} text="Лента" data-story="startPage">
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Лента" data-story="startPage">
 				<Icon28TextLiveOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList">
-					<Icon28GameOutline />
-				</TabbarItem>
+				{/*<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList">*/}
+				{/*	<Icon28GameOutline />*/}
+				{/*</TabbarItem>*/}
 				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
 			</Tabbar>
 		}>
@@ -129,13 +133,14 @@ const App = () => {
 				platform={platform}
 				unoficial={unoficial}
 				setActiveModal={setActiveModal}
+				goBack={goBack}
 			/>
 		</View>
 			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='persik' go={go} />
+				<Persik id='persik' go={goBack} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
-				<StartPage id='startPage' go={go} />
+				<StartPage id='startPage' goTo={goTo}/>
 			</View>
 		</Epic>
 	);
