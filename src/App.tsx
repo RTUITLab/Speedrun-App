@@ -6,8 +6,9 @@ import { OpenAPI } from './api/core/OpenAPI';
 import Icon28GameOutline from '@vkontakte/icons/dist/28/game_outline';
 import Icon28TextLiveOutline from '@vkontakte/icons/dist/28/text_live_outline';
 import GamesList from './panels/GamesList';
-import Persik from './panels/Persik';
+import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
+import PlayVideo from "./panels/PlayVideo";
 import { Icon24Cancel } from '@vkontakte/icons';
 
 const App = () => {
@@ -17,6 +18,8 @@ const App = () => {
 	const [unoficial, setUnoficial]: [any, Dispatch<SetStateAction<any>>] = useState(false);
 	const [activePanel, setActivePanel] = useState('startPage');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
+	const [tourPanel, setTourPanel] = useState('tournament');
+	const [videoId, setVideoId] = useState('');
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data } }) => {
@@ -67,6 +70,11 @@ const App = () => {
 	const go = e => {
 		setActivePanel(e.currentTarget.dataset.to);
 	};
+
+	const goTour = (to, id) => {
+		setVideoId(id);
+		setTourPanel(to);
+	}
 
 	const setStore = e => {
 		setActivePanel(e.currentTarget.dataset.story);
@@ -131,8 +139,9 @@ const App = () => {
 				setActiveModal={setActiveModal}
 			/>
 		</View>
-			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='persik' go={go} />
+			<View id="persik" activePanel={tourPanel} popout={popout}>
+				<Tournaments id='tournament' go={goTour} />
+				<PlayVideo id='video' link={videoId} go={setTourPanel} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' go={go} />
