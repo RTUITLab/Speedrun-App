@@ -4,12 +4,13 @@ import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, Mo
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api';
 
-import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline } from '@vkontakte/icons';
-
+import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline, Icon28Profile } from '@vkontakte/icons';
 import GamesList from './panels/GamesList';
 import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
+
 import PlayVideo from "./panels/PlayVideo";
+import Persik from "./panels/Persik";
 
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
@@ -268,10 +269,12 @@ const App = () => {
 				<TabbarItem onClick={setStore} selected={activePanel === "tournaments"} text="Турниры" data-story="tournaments">
 					<Icon28TextLiveOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Игры" data-story="startPage">
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Общее" data-story="startPage">
 					<Icon28GameOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
+				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Профиль" data-story="persik">
+					<Icon28Profile />
+				</TabbarItem>
 			</Tabbar>
 		}>
 			<View id="gameList" activePanel="gameList" popout={popout} modal={modals}>
@@ -290,6 +293,17 @@ const App = () => {
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' goTo={goTo}/>
+				<GamesList
+					id='gameList'
+					sort={sort}
+					platform={platform}
+					unofficial={unofficial}
+					setActiveModal={setActiveModal}
+					goBack={goBack}
+				/>
+			</View>
+			<View id="persik" activePanel="persik" popout={popout}>
+				<Persik id='persik' go={goBack}/>
 			</View>
 		</Epic>
 	);
