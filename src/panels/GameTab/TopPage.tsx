@@ -58,7 +58,7 @@ const TopPage = (props) => {
         async function fetchCategory() {
             if (categories === null) {
                 const data = await GamesService.getCategories(props.id);
-                setCategories(() => data);
+                setCategories(() => data.filter(d => d.type === 'per-game'));
             }
         }
 
@@ -83,7 +83,7 @@ const TopPage = (props) => {
             place: r.place+'',
             name: (r.run?.players ? r.run?.players[0].name : "") || "",
             time: (r.run?.times?.primary) || "",
-            platform: leadboard?.platform+'',
+            platform: lb?.platform+'',
             old: r
         })) as leadbordTest[];
         setTestA(data);
