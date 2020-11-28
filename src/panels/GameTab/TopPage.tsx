@@ -81,7 +81,7 @@ const TopPage = (props) => {
         const data = lb?.runs?.map(r => ({
             place: r.place+'',
             name: (r.run?.players ? r.run?.players[0].name : "") || "",
-            time: (r.run?.times?.primary) || "",
+            time: (r.run?.times.prettyTime) || "",
             platform: lb?.platform+'',
             old: r
         })) as leadbordTest[];
