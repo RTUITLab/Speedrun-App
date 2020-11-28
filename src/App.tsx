@@ -3,11 +3,11 @@ import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import {View, ScreenSpinner, Epic, Tabbar, TabbarItem} from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api/core/OpenAPI';
-
+import Icon24GameOutline from '@vkontakte/icons/dist/24/game_outline';
+import Icon24TextLiveOutline from '@vkontakte/icons/dist/24/text_live_outline';
 import GamesList from './panels/GamesList';
 import Persik from './panels/Persik';
 import StartPage from "./panels/StartPage";
-
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState('startPage');
@@ -44,9 +44,13 @@ const App = () => {
 	return (
 		<Epic activeStory={activePanel} tabbar={
 			<Tabbar>
-				<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList"/>
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage"} text="Лента" data-story="startPage">
+				<Icon24TextLiveOutline />
+				</TabbarItem>
+				<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList">
+					<Icon24GameOutline />
+				</TabbarItem>
 				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage"} text="Лента" data-story="startPage"/>
 			</Tabbar>
 		}>
 		<View id="gameList" activePanel="gameList" popout={popout}>
