@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
@@ -6,8 +6,8 @@ import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api/core/OpenAPI';
 
 import GamesList from './panels/GamesList';
-import { Button, CellButton, Checkbox, FormLayout, Input, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Select } from '@vkontakte/vkui';
-import { Icon24Add, Icon24Cancel } from '@vkontakte/icons';
+import { Button, Checkbox, FormLayout, ModalPage, ModalPageHeader, ModalRoot, PanelHeaderButton, Select } from '@vkontakte/vkui';
+import { Icon24Cancel } from '@vkontakte/icons';
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState('gameList');
@@ -62,6 +62,7 @@ const App = () => {
 		setPlatform(null);
 		setSort(null);
 		setUnoficial(false);
+		closeModal();
 	}
 
 	const modals = (
@@ -96,7 +97,7 @@ const App = () => {
 					<Checkbox name="unoficial" value={unoficial}>
 						Неофициальные релизы игр
 					</Checkbox>
-					<Button size="xl">Применить фильтры</Button>
+					<Button size="xl" onClick={closeModal}>Применить фильтры</Button>
 				</FormLayout>
 			</ModalPage>
         </ModalRoot>
@@ -104,7 +105,13 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout} modal={modals}>
-			<GamesList id='gameList' />
+			<GamesList
+				id='gameList'
+				setActiveModal={setActiveModal}
+				sort={sort}
+				unoficial={unoficial}
+				platform={platform}
+			/>
 		</View>
 	);
 }
