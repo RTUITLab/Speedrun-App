@@ -53,7 +53,7 @@ const App = () => {
 			<GamesList id='gameList' />
 		</View>
 			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='gameList' go={go} />
+				<Persik id='persik' go={go} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' go={go} />
