@@ -6,21 +6,22 @@ import reportWebVitals from './reportWebVitals';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { OpenAPI } from './api/core/OpenAPI';
+import { FavoriteService } from './services/FavoritesService';
 
 OpenAPI.BASE = process.env.REACT_APP_BACKEND_URL || 'https://localhost:5001';
 
 // Sends event to client
 bridge.send('VKWebAppInit');
- 
+
 // Subscribes to event, sended by client
-bridge.subscribe(e =>{
+bridge.subscribe(e => {
   console.log(e);
   if (e.detail.type === 'VKWebAppUpdateConfig') {
     const schemeAttribute = document.createAttribute('scheme');
     const configData = e.detail.data as UpdateConfigData;
     schemeAttribute.value = configData.scheme ? configData.scheme : 'client_light';
     document.body.attributes.setNamedItem(schemeAttribute);
-  } 
+  }
 });
 ReactDOM.render(
   <React.StrictMode>
