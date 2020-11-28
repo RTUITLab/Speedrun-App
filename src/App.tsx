@@ -9,7 +9,7 @@ import GamesList from './panels/GamesList';
 import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
 import PlayVideo from "./panels/PlayVideo";
-import { Icon24Cancel } from '@vkontakte/icons';
+import { Icon24Cancel, Icon28GameOutline } from '@vkontakte/icons';
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
 	const [platform, setPlatform]: [any, Dispatch<SetStateAction<any>>] = useState("");
@@ -264,12 +264,12 @@ const App = () => {
 	return (
 		<Epic activeStory={activePanel} tabbar={
 			<Tabbar>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Лента" data-story="startPage">
-				<Icon28TextLiveOutline />
+				<TabbarItem onClick={setStore} selected={activePanel === "tournaments"} text="Турниры" data-story="tournaments">
+					<Icon28TextLiveOutline />
 				</TabbarItem>
-				{/*<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList">*/}
-				{/*	<Icon28GameOutline />*/}
-				{/*</TabbarItem>*/}
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Игры" data-story="startPage">
+					<Icon28GameOutline />
+				</TabbarItem>
 				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
 			</Tabbar>
 		}>
@@ -283,7 +283,7 @@ const App = () => {
                     goBack={goBack}
 				/>
 			</View>
-			<View id="persik" activePanel={tourPanel} popout={popout}>
+			<View id="tournaments" activePanel={tourPanel} popout={popout}>
 				<Tournaments id='tournament' go={goTour} />
 				<PlayVideo id='video' link={videoId} go={setTourPanel} />
 			</View>
