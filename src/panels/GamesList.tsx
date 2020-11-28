@@ -1,5 +1,4 @@
-import React, { Component, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import PropTypes from "prop-types";
+import React, { Component, Dispatch, SetStateAction} from 'react';
 import logo from '../logo.svg'
 import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack} from '@vkontakte/vkui';
 
@@ -63,7 +62,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                     onIconClick={() => this.props.setActiveModal('filter')}/>
             <List>
                 {this.state.gList && this.state.gList
-                .filter(g => g.title?.toLowerCase().indexOf(this.state.gameTitle) != -1)
+                .filter(g => g.title?.toLowerCase().indexOf(this.state.gameTitle) !== -1)
                 .map(g => <Cell key={g.id} before={<Avatar style={{
                     objectFit: "cover"
                 }} size={80} mode="image" src={g.image ? g.image : logo} />} onClick={() => {
