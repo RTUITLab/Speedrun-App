@@ -1,4 +1,4 @@
-import React, { Component, Dispatch, SetStateAction} from 'react';
+import React, { Component, Dispatch, SetStateAction, useImperativeHandle } from 'react';
 import logo from '../logo.svg'
 import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack, View} from '@vkontakte/vkui';
 
@@ -14,7 +14,8 @@ type GamesListProps = {
     sort: string | null,
     unofficial: boolean,
     setActiveModal: Dispatch<SetStateAction<any>>,
-    goBack: (e: any) => void
+    goBack: (e: any) => void,
+    ref?
 }
 
 type GamesListState = {
@@ -37,17 +38,9 @@ class GamesList extends Component<GamesListProps, GamesListState> {
         }
     }
 
-    async componentDidUpdate(oldProps: GamesListProps) {
-        if (this.state.gList == null ||
-            oldProps.platform !== this.props.platform ||
-            oldProps.sort !== this.props.sort ||
-            oldProps.unofficial !== this.props.unofficial
-        ) {
-            const data = await GamesService.getCompactGames(undefined, this.props.platform, this.props.sort, this.props.unofficial);
-            this.setState({ gList: data });
-        }
-
-
+    async filter() {
+        const data = await GamesService.getCompactGames(undefined, this.props.platform, this.props.sort, this.props.unofficial);
+        this.setState({ gList: data });
     }
 
     onChange(e: React.ChangeEvent<HTMLInputElement>) {

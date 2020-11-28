@@ -1,5 +1,5 @@
-import { Icon16Play, Icon20SlidersOutline, Icon24Dropdown, Icon24Flash } from "@vkontakte/icons";
-import { Avatar, Caption, Cell, Div, FixedLayout, Group, Header, Headline, HorizontalScroll, List, Panel, PanelHeader, Tabs, TabsItem, Text } from "@vkontakte/vkui";
+import { Icon16Play, Icon24Dropdown } from "@vkontakte/icons";
+import { Avatar, Caption, Cell, Div, Group, Header, HorizontalScroll, Panel, PanelHeader, Tabs, TabsItem, Text } from "@vkontakte/vkui";
 import { useEffect, useState } from "react";
 
 const Tournaments = ({id, go}) => {
@@ -65,8 +65,8 @@ const Tournaments = ({id, go}) => {
 
     const convertDay = (day) => {
         let dict = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
-
-        return dict[day];
+        console.log(day);
+        return  day === 0 ? 'вс' : dict[day - 1];
     }
 
     return (

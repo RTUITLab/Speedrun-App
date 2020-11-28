@@ -1,0 +1,12 @@
+# @name compactGames
+GET https://192.168.2.61:5001/api/games
+
+###
+
+# @name categories
+GET https://192.168.2.61:5001/api/games/{{compactGames.response.body.0.id}}/categories
+
+###
+
+# @name leaderboard
+GET https://192.168.2.61:5001/api/leaderboards/{{compactGames.response.body.0.id}}/{{categories.response.body.0.id}}/

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useRef, createRef, RefObject } from 'react';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, ModalPageHeader, PanelHeaderButton, FormLayout, Select, Checkbox, Button } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
@@ -84,6 +84,8 @@ const App = () => {
 	const setStore = e => {
 		setActivePanel(e.currentTarget.dataset.story);
 	}
+
+	const gamesRef = createRef<any>();
 
 	const modals = (
 		<ModalRoot activeModal={activeModal} onClose={closeModal}>
@@ -255,7 +257,7 @@ const App = () => {
 					<Checkbox name="unofficial" value={unofficial+''} onChange={onChange}>
 						Неофициальные релизы игр
 					</Checkbox>
-					<Button size="xl" onClick={closeModal}>Применить фильтры</Button>
+					<Button size="xl" onClick={() => {gamesRef.current.filter(); closeModal();}}>Применить фильтры</Button>
 				</FormLayout>
 			</ModalPage>
 		</ModalRoot>
@@ -282,7 +284,8 @@ const App = () => {
 					platform={platform}
 					unofficial={unofficial}
 					setActiveModal={setActiveModal}
-                    goBack={goBack}
+					goBack={goBack}
+					ref={gamesRef}
 				/>
 			</View>
 			<View id="tournaments" activePanel={tourPanel} popout={popout}>
