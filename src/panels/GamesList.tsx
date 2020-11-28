@@ -1,59 +1,79 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from "prop-types";
+import React, { Component, Dispatch, SetStateAction} from 'react';
 import logo from '../logo.svg'
-import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderButton} from '@vkontakte/vkui';
+import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack} from '@vkontakte/vkui';
 
-import {GamesService} from '../api/services/GamesService';
+import { GamesService } from '../api/services/GamesService';
 import type { GameCompact } from '../api/models/GameCompact';
 import { Icon24Filter } from '@vkontakte/icons';
 
-const GamesList = props => {
-    const [gamesList, setGamesList] = useState<Array<GameCompact> | null>(null)
-    const [gList, sGList] = useState<Array<GameCompact>>([])
+type GamesListProps = {
+    id: string,
+    platform: string | null,
+    sort: string | null,
+    unofficial: boolean,
+    setActiveModal: Dispatch<SetStateAction<any>>,
+    goBack: (e: any) => void
+}
 
-    useEffect(() => {
-        async function fetchGamesList() {
-            if (gamesList == null) {
-                const data = await GamesService.getCompactGames();
-                setGamesList(() => data);
-                sGList(() => data);
-            }
-        }
+type GamesListState = {
+    gList: Array<GameCompact> | null,
+    gameTitle: string
+}
 
-        fetchGamesList().then(r => console.log("Done"));
-    })
+class GamesList extends Component<GamesListProps, GamesListState> {
+    constructor(props) {
+        super(props);
+        this.state = { gList: null, gameTitle: "" };
+    }
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (gamesList !== null) {
-            const name = e.target.value.toLowerCase();
-            sGList(() => gamesList.filter(g => g.title ? g.title.toLowerCase().indexOf(name) > -1 : ''));
+    async componentDidMount() {
+        if (this.state.gList == null) {
+            const data = await GamesService.getCompactGames(undefined, this.props.platform, this.props.sort, this.props.unofficial);
+            this.setState({ gList: data });
         }
     }
 
-    return (
-        <Panel id={props.id}>
-            <PanelHeader>Игры</PanelHeader>
-            <Search onChange={onChange} icon={<Icon24Filter />} onIconClick={() => props.setActiveModal('filter')} />
-            <List>
-                {gList.length > 0  &&
-                gList.map(g =>
-                    <Cell key={g.id} before={<Avatar style={{objectFit: "cover"}} size={80} mode="image" src={g.image ? g.image : logo}/>} onClick={() => {
-                        console.log("keke");
-                    }}>
-                        {g.title}
-                    </Cell>
-                )}
-            </List>
-        </Panel>
-    )
-};
+    async componentDidUpdate(oldProps: GamesListProps) {
+        if (this.state.gList == null ||
+            oldProps.platform !== this.props.platform ||
+            oldProps.sort !== this.props.sort ||
+            oldProps.unofficial !== this.props.unofficial
+        ) {
+            const data = await GamesService.getCompactGames(undefined, this.props.platform, this.props.sort, this.props.unofficial);
+            this.setState({ gList: data });
+        }
 
-GamesList.propTypes = {
-    id: PropTypes.string.isRequired,
-    setActiveModal: PropTypes.func,
-    sort: PropTypes.string,
-    platform: PropTypes.string,
-    unoficial: PropTypes.bool
+
+    }
+
+    onChange(e: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({gameTitle: e.target.value});
+    };
+
+    render() {
+    return (
+        <Panel id={this.props.id}>
+
+            <PanelHeader
+                left={<PanelHeaderBack onClick={this.props.goBack} data-to="startPage" />}>
+                Игры
+            </PanelHeader>
+            <Search autoFocus onChange={(e) => this.onChange(e)} icon={<Icon24Filter/>}
+                    onIconClick={() => this.props.setActiveModal('filter')}/>
+            <List>
+                {this.state.gList && this.state.gList
+                .filter(g => g.title?.toLowerCase().indexOf(this.state.gameTitle) !== -1)
+                .map(g => <Cell key={g.id} before={<Avatar style={{
+                    objectFit: "cover"
+                }} size={80} mode="image" src={g.image ? g.image : logo} />} onClick={() => {
+                    console.log("keke");
+                }}>
+                    {g.title}
+                </Cell>)}
+            </List>
+        </Panel>);
+    }
+
 }
 
 export default GamesList;
