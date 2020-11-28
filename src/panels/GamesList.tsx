@@ -9,7 +9,7 @@ import type { GameCompact } from '../api/models/GameCompact';
 import { Icon24Filter } from '@vkontakte/icons';
 
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import '@sandstreamdev/react-swipeable-list/dist/styles.css';
+import './GameList.css'
 import { FavoriteService } from '../services/FavoritesService';
 
 type GamesListProps = {
@@ -87,7 +87,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                                 <SwipeableListItem
                                     key={g.id}
                                     swipeRight={{
-                                        content: <Cell>Add to favorite</Cell>,
+                                        content: <Cell>Добавить в избранное</Cell>,
                                         action: () => this.addGameToFavorites(g.id || "")
                                     }}
                                     >
@@ -96,7 +96,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                                         before={<Avatar style={{
                                             objectFit: "cover"
                                         }} size={80} mode="image" src={g.image ? g.image : logo} />} onClick={() => {
-                                            this.setState({ activeView: 'test', setGame: g })
+                                            this.setState({ activeView: 'gameInfo', setGame: g })
                                         }}>
                                         {g.title}
                                     </Cell>
@@ -104,8 +104,8 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                             )}
                     </SwipeableList>
                 </Panel>
-                <Panel id='test'>
-                    <GamePage id='test' goTo={(a) => this.goBack(a)} game={this.state.setGame} />
+                <Panel id='gameInfo'>
+                    <GamePage id='gameInfo' goTo={(a) => this.goBack(a)} game={{id: this.state.setGame?.id, gameName: this.state.setGame?.title}} />
                 </Panel>
             </View>);
     }

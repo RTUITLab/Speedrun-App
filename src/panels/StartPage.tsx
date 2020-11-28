@@ -9,6 +9,7 @@ import Card from '@vkontakte/vkui/dist/components/Card/Card';
 import Header from '@vkontakte/vkui/dist/components/Header/Header';
 import { Avatar, Cell, CardScroll, Search } from '@vkontakte/vkui'
 import { FavoriteService } from '../services/FavoritesService';
+import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import './Persik.css';
 import mc from '../img/MineCraft.jpg';
 import { Game, Stream, StreamsService } from "../api";
@@ -24,8 +25,6 @@ const StartPage = props => {
             }
             if (favoriteGames == null) {
                 const data = await FavoriteService.getFavoriteGames();
-                console.log("data");
-                console.log(data);
 
                 setFavoriteGames(data);
             }
@@ -33,6 +32,18 @@ const StartPage = props => {
 
         fetchGamesList().then(r => console.log("Done"));
     })
+
+    async function deleteGameFromFavourite(id: string): Promise<void> {
+        const newList: Array<string> = [];
+        favoriteGames!.filter(G => G.id !== id).forEach(G => {
+            newList.push(G.id || '');
+        });
+        await FavoriteService.setFavoriteGames(newList);
+        const saved = await FavoriteService.getFavoriteGameIds();
+
+        setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
+    }
+
     const getLinkForGame = (game: Game): string => {
         if (game.assets) {
             if (game.assets["cover-large"]) {
@@ -60,20 +71,29 @@ const StartPage = props => {
                         </div>
 
                         <div style={{ height: 300 }}>
-                            {favoriteGames && favoriteGames.map(g =>
-
-                                <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={getLinkForGame(g)} />}>
-                                    <div style={{ width: "100$", textAlign: "center" }}>
-                                        <div style={{ float: "left" }}>
-                                            {g.names?.international || "no name"}
-                                    </div>
-                                        <div style={{ float: "right" }}>
-                                            <div style={{ fontSize: "16px" }}>13m 54c</div>
-                                            <div style={{ fontSize: "12px" }}>-22s</div>
-                                        </div>
-                                    </div>
-                                </Cell>
-                            )}
+                            <SwipeableList>
+                                {favoriteGames && favoriteGames.map(g =>
+                                    <SwipeableListItem
+                                        key={g.id}
+                                        swipeLeft={{
+                                            content: <Cell>Удалить из избранного</Cell>,
+                                            action: () => deleteGameFromFavourite(g.id || "")
+                                        }}
+                                    >
+                                        <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={getLinkForGame(g)} />}>
+                                            <div style={{ width: "100$", textAlign: "center" }}>
+                                                <div style={{ float: "left" }}>
+                                                    {g.names?.international || "no name"}
+                                            </div>
+                                                <div style={{ float: "right" }}>
+                                                    <div style={{ fontSize: "16px" }}>13m 54c</div>
+                                                    <div style={{ fontSize: "12px" }}>-22s</div>
+                                                </div>
+                                            </div>
+                                        </Cell>
+                                    </SwipeableListItem>
+                                )}
+                            </SwipeableList>
                         </div>
                     </Card>
                 </CardGrid>
