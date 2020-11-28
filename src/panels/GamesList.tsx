@@ -48,7 +48,11 @@ const GamesList = props => {
 };
 
 GamesList.propTypes = {
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    setActiveModal: PropTypes.func,
+    sort: PropTypes.string,
+    platform: PropTypes.string,
+    unoficial: PropTypes.bool
 }
 
 export default GamesList;
