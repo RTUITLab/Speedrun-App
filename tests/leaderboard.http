@@ -18,3 +18,8 @@ GET {{host}}/api/leaderboards/{{compactGames.response.body.0.id}}/{{categories.r
 ###
 GET {{host}}/api/tournament
 
+###
+{{host}}/api/games/byids?ids=j1npme6p
+###
+https://www.speedrun.com/api/v1/games/j1npme6p
+
