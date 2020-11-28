@@ -65,8 +65,8 @@ const Tournaments = ({id, go}) => {
 
     const convertDay = (day) => {
         let dict = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
-
-        return dict[day];
+        console.log(day);
+        return  day === 0 ? 'вс' : dict[day - 1];
     }
 
     return (
