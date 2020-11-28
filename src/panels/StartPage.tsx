@@ -25,8 +25,6 @@ const StartPage = props => {
             }
             if (favoriteGames == null) {
                 const data = await FavoriteService.getFavoriteGames();
-                console.log("data");
-                console.log(data);
 
                 setFavoriteGames(data);
             }
@@ -44,9 +42,6 @@ const StartPage = props => {
         const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
-        console.log("deleted");
-        
-        console.log(saved);
     }
 
     const getLinkForGame = (game: Game): string => {

@@ -20,22 +20,25 @@ const Rules = ({game}) => {
             if (!data.length) {
                 let res = await GamesService.getCategories(game.id);
                 setData(res);
-                
-                let moders = ["103690632", "302985067"]
-                
-                const token = await (await bridge.send("VKWebAppGetAuthToken", {"app_id": 7679570, "scope": ""})).access_token;
-
-                const responce = (await bridge.send("VKWebAppCallAPIMethod", {"method": "users.get", "params":  {"user_ids": moders.join(','), "v":"5.126", "access_token": token, "fields": "photo_200"}})).response;
-                let m: Array<User> = [];
-                responce.forEach(user => {
-                    m.push({name: [user.first_name, user.last_name].join(' '), photo_200: user.photo_200, url: "https://vk.com/id"+user.id });
-                });
-                setModerators(m);
             }
         }
 
         fetchData();
     });
+
+    const fetchModerators = async (id: string) => {
+        let moders = await GamesService.getModeratorsIds(game.id, id);
+        console.log(moders);
+        
+        const token = await (await bridge.send("VKWebAppGetAuthToken", {"app_id": 7679570, "scope": ""})).access_token;
+
+        const responce = (await bridge.send("VKWebAppCallAPIMethod", {"method": "users.get", "params":  {"user_ids": moders.join(','), "v":"5.126", "access_token": token, "fields": "photo_200"}})).response;
+        let m: Array<User> = [];
+        responce.forEach(user => {
+            m.push({name: [user.first_name, user.last_name].join(' '), photo_200: user.photo_200, url: "https://vk.com/id"+user.id });
+        });
+        setModerators(m);
+    }
 
     return (
         <Div style={{paddingTop: 0}}>
@@ -44,7 +47,7 @@ const Rules = ({game}) => {
 				top="Категория"
                 placeholder="Выбрать категорию"
                 value={ruleName}
-                onChange={(e) => setRuleName(e.currentTarget.value)}
+                onChange={(e) => { setRuleName(e.currentTarget.value); fetchModerators(e.currentTarget.value) }}
             >
                 {
                     data.map(c => (
