@@ -1,6 +1,7 @@
 import { Icon16Play, Icon24Dropdown } from "@vkontakte/icons";
 import { Avatar, Caption, Cell, Div, Group, Header, HorizontalScroll, Panel, PanelHeader, Tabs, TabsItem, Text } from "@vkontakte/vkui";
 import { useEffect, useState } from "react";
+import { TournamentService } from "../api/services/TournamentService";
 
 const Tournaments = ({id, go}) => {
     const [dates, setDates] = useState<Array<Date> | null>(null);
@@ -11,6 +12,7 @@ const Tournaments = ({id, go}) => {
     const [Any, setAny] = useState<Array<Tournament>>([]);
     const [hundred, setHundred] = useState<Array<Tournament>>([]);
     const [glichless, setGlichless] = useState<Array<Tournament>>([]);
+    const [data, setData] = useState<Array<any>>([]);
 
     useEffect(() => {
         async function genDates() {
@@ -25,6 +27,9 @@ const Tournaments = ({id, go}) => {
                     }
                 }
                 setDates(d);
+
+                const data = await TournamentService.getTournament()
+                setData(data);
 
                 let all:Array<Tournament> = [
                     {
@@ -57,7 +62,7 @@ const Tournaments = ({id, go}) => {
                 setHundred(all);
                 setGlichless(all);
             }
-            console.log(Any)
+            console.log(data)
         }
 
         genDates();
@@ -65,7 +70,6 @@ const Tournaments = ({id, go}) => {
 
     const convertDay = (day) => {
         let dict = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
-        console.log(day);
         return  day === 0 ? 'вс' : dict[day - 1];
     }
 
@@ -91,6 +95,31 @@ const Tournaments = ({id, go}) => {
                  </HorizontalScroll>
             </Tabs>
 
+            {
+                data.map(c => (
+                    <Group>
+                        <Header aside={<Icon24Dropdown onClick={() =>{ setIsAny(!isAny) }} style={{transform: isAny === true ? 'rotate(180deg)' : ''}} />}>
+                            {c.category}
+                        </Header>
+                        {
+                            (isAny) ? c.tournaments.map(t => (
+                                <Cell before={<Avatar size={44} mode="image" src={t.gameCoverImage}/>} >
+                                    <Div style={{display: "grid", gridTemplateColumns: '1fr 18px', padding: '5px 0'}}>
+                                        <Div style={{padding: 0}}>
+                                            <Text weight="medium" style={{paddingTop: 0}}>{t.gameTitle} - {t.nickName}</Text>
+                                            <Text weight="regular" style={{paddingTop: 0, color: 'var(--text_secondary)'}}>Сегодня в {t.startTime}:00</Text>
+                                        </Div>
+                                        <Icon16Play style={{paddingTop: 5}} onClick={() => go('video', t.twichUrl)} />
+                                    </Div>
+                                </Cell>
+                            ))
+                            : ''
+                        }
+                    </Group>
+                ))
+            }
+
+            {/*
             <Group>
                 <Header aside={<Icon24Dropdown onClick={() =>{ setIsAny(!isAny) }} style={{transform: isAny === true ? 'rotate(180deg)' : ''}} />}>
                     Any%
@@ -150,6 +179,7 @@ const Tournaments = ({id, go}) => {
                     : ''
                 }
             </Group>
+            */}
         </Panel>
     )
 }
