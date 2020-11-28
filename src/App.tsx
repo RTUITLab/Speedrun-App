@@ -4,12 +4,13 @@ import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, Mo
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api';
 
-import Icon28TextLiveOutline from '@vkontakte/icons/dist/28/text_live_outline';
+import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline, Icon28Profile } from '@vkontakte/icons';
 import GamesList from './panels/GamesList';
 import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
+
 import PlayVideo from "./panels/PlayVideo";
-import { Icon24Cancel, Icon28GameOutline } from '@vkontakte/icons';
+import Persik from "./panels/Persik";
 
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
@@ -237,23 +238,21 @@ const App = () => {
 						<option value="ZXSpectrum" data-id="">ZXSpectrum</option>
 					</Select>
 					<Select
-						top="Сортировать по"
+						top="Сортировать"
 						placeholder="Выбрать порядок отображения"
 						value={sort}
 						name="sort"
 						onChange={onChange}
 					>
-						<option value="title">Sort by title</option>
-						<option value="oldest">Sort by oldest</option>
-						<option value="newest">Sort by newest</option>
-						<option value="mostactive">Sort by most active</option>
-						<option value="leastactive">Sort by least active</option>
-						<option value="mostplayers">Sort by most players</option>
-						<option value="fewestplayers">Sort by fewest players</option>
-						<option value="mostruns">Sort by most runs</option>
-						<option value="fewestruns">Sort by fewest runs</option>
-						<option value="latestadded">Sort by latest added</option>
-						<option value="earliestadded">Sort by earliest added</option>
+						<option value="title">По алфвиту</option>
+						<option value="oldest">Сначала новые</option>
+						<option value="newest">Сначала старые</option>
+						<option value="mostactive">Самые активные</option>
+						<option value="leastactive">Самые пасивные</option>
+						<option value="mostplayers">Больше всего игроков</option>
+						<option value="fewestplayers">Меньше всего игроков</option>
+						<option value="mostruns">Большее число ранов</option>
+						<option value="fewestruns">Меньшее число ранов</option>
 					</Select>
 					<Checkbox name="unofficial" value={unofficial+''} onChange={onChange}>
 						Неофициальные релизы игр
@@ -270,10 +269,12 @@ const App = () => {
 				<TabbarItem onClick={setStore} selected={activePanel === "tournaments"} text="Турниры" data-story="tournaments">
 					<Icon28TextLiveOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Игры" data-story="startPage">
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Общее" data-story="startPage">
 					<Icon28GameOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
+				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Профиль" data-story="persik">
+					<Icon28Profile />
+				</TabbarItem>
 			</Tabbar>
 		}>
 			<View id="gameList" activePanel="gameList" popout={popout} modal={modals}>
@@ -293,6 +294,17 @@ const App = () => {
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' goTo={goTo}/>
+				<GamesList
+					id='gameList'
+					sort={sort}
+					platform={platform}
+					unofficial={unofficial}
+					setActiveModal={setActiveModal}
+					goBack={goBack}
+				/>
+			</View>
+			<View id="persik" activePanel="persik" popout={popout}>
+				<Persik id='persik' go={goBack}/>
 			</View>
 		</Epic>
 	);
