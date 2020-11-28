@@ -4,11 +4,12 @@ import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, Mo
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api';
 
-import Icon28TextLiveOutline from '@vkontakte/icons/dist/28/text_live_outline';
+import { Icon24Cancel, Icon28TextLiveOutline } from '@vkontakte/icons';
+
 import GamesList from './panels/GamesList';
 import Persik from './panels/Persik';
 import StartPage from "./panels/StartPage";
-import { Icon24Cancel } from '@vkontakte/icons';
+
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
 	const [platform, setPlatform]: [any, Dispatch<SetStateAction<any>>] = useState("");
