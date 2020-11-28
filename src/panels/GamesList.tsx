@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import logo from '../logo.svg'
-import {Panel, PanelHeader, List, Cell, Avatar, Search} from '@vkontakte/vkui';
+import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderButton} from '@vkontakte/vkui';
 
 import {GamesService} from '../api/services/GamesService';
 import type { GameCompact } from '../api/models/GameCompact';
+import { Icon24Filter } from '@vkontakte/icons';
 
 const GamesList = props => {
     const [gamesList, setGamesList] = useState<Array<GameCompact> | null>(null)
@@ -31,8 +32,8 @@ const GamesList = props => {
 
     return (
         <Panel id={props.id}>
-            <PanelHeader>Игры</PanelHeader>
-            <Search onChange={onChange}/>
+            <PanelHeader left={<PanelHeaderButton onClick={() => props.setActiveModal('filter')}><Icon24Filter /></PanelHeaderButton>}>Игры</PanelHeader>
+            <Search onChange={onChange} />
             <List>
                 {gList.length > 0  &&
                 gList.map(g =>
