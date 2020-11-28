@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import bridge, { UpdateConfigData, UserInfo } from '@vkontakte/vk-bridge';
+import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api/core/OpenAPI';
 
-import Home from './panels/Home';
 import Persik from './panels/Persik';
+import GamesList from './panels/GamesList';
 
 const App = () => {
-	const [activePanel, setActivePanel] = useState('home');
-	const [fetchedUser, setUser] = useState<UserInfo | null>(null);
+	const [activePanel, setActivePanel] = useState('gameList');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
 
 	useEffect(() => {
@@ -24,8 +23,7 @@ const App = () => {
 		});
 		async function fetchData() {
 			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser((s) => user);
-			console.log(user);
+
 			OpenAPI.HEADERS = {
 				'UserId': user.id+''
 			};
@@ -40,8 +38,8 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<Home id='home' fetchedUser={fetchedUser} go={go} />
 			<Persik id='persik' go={go} />
+			<GamesList id='gameList' />
 		</View>
 	);
 }
