@@ -4,11 +4,12 @@ import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, Mo
 import '@vkontakte/vkui/dist/vkui.css';
 import { OpenAPI } from './api';
 
-import { Icon24Cancel, Icon28TextLiveOutline } from '@vkontakte/icons';
+import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline } from '@vkontakte/icons';
 
 import GamesList from './panels/GamesList';
-import Persik from './panels/Persik';
+import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
+import PlayVideo from "./panels/PlayVideo";
 
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
@@ -17,6 +18,8 @@ const App = () => {
 	const [unofficial, setUnofficial]: [boolean, Dispatch<SetStateAction<any>>] = useState(false);
 	const [activePanel, setActivePanel] = useState('startPage');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
+	const [tourPanel, setTourPanel] = useState('tournament');
+	const [videoId, setVideoId] = useState('');
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data } }) => {
@@ -71,6 +74,11 @@ const App = () => {
 	const goTo = (str: string) => {
 		setActivePanel(str);
 	};
+
+	const goTour = (to, id) => {
+		setVideoId(id);
+		setTourPanel(to);
+	}
 
 	const setStore = e => {
 		setActivePanel(e.currentTarget.dataset.story);
@@ -257,12 +265,12 @@ const App = () => {
 	return (
 		<Epic activeStory={activePanel} tabbar={
 			<Tabbar>
-				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Лента" data-story="startPage">
-				<Icon28TextLiveOutline />
+				<TabbarItem onClick={setStore} selected={activePanel === "tournaments"} text="Турниры" data-story="tournaments">
+					<Icon28TextLiveOutline />
 				</TabbarItem>
-				{/*<TabbarItem onClick={setStore} selected={activePanel === "gameList"} text="Игры" data-story="gameList">*/}
-				{/*	<Icon28GameOutline />*/}
-				{/*</TabbarItem>*/}
+				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Игры" data-story="startPage">
+					<Icon28GameOutline />
+				</TabbarItem>
 				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Персик" data-story="persik"/>
 			</Tabbar>
 		}>
@@ -276,9 +284,9 @@ const App = () => {
                     goBack={goBack}
 				/>
 			</View>
-
-			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='persik' go={goBack} />
+			<View id="tournaments" activePanel={tourPanel} popout={popout}>
+				<Tournaments id='tournament' go={goTour} />
+				<PlayVideo id='video' link={videoId} go={setTourPanel} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' goTo={goTo}/>
