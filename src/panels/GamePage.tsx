@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Panel, PanelHeader, PanelHeaderBack, Tabs, HorizontalScroll, TabsItem, Group} from '@vkontakte/vkui'
-
+import type { GameCompact } from '../api/models/GameCompact';
 import TopPage from './GameTab/TopPage';
 
 const GamePage = (props) => {
@@ -11,7 +11,7 @@ const GamePage = (props) => {
     return (
         <Panel id={props.id}>
             <PanelHeader left={<PanelHeaderBack onClick={() => props.goTo('list')}  data-to="list" />}>
-                {props.game.title}
+                {props.game.gameName}
         </PanelHeader>
             <Tabs id ={props.id}>
                 <HorizontalScroll>
@@ -33,7 +33,7 @@ const GamePage = (props) => {
                 </HorizontalScroll>
             </Tabs>
 
-                {{'top': <TopPage />,
+                {{'top': <TopPage id={props.game.id} />,
                 'stream': <p>Stream</p>
                 }[activeTab]
                 }
@@ -45,7 +45,10 @@ const GamePage = (props) => {
 GamePage.propTypes = {
     id: PropTypes.string.isRequired,
     goTo: PropTypes.func.isRequired,
-    game: PropTypes.any.isRequired
+    game: PropTypes.shape({
+        id: PropTypes.string,
+        gameName: PropTypes.string
+    })
 };
 
 export default GamePage;

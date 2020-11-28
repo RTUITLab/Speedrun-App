@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { OpenAPI } from './api/core/OpenAPI';
 
 OpenAPI.BASE = process.env.REACT_APP_BACKEND_URL || 'https://localhost:5001';
