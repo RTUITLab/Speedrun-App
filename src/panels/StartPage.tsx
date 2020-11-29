@@ -82,9 +82,9 @@ const StartPage = props => {
                 <Group separator="hide">
                     <CardGrid>
                         <Card size="l">
-                            <div style={{ display: "grid", gridTemplateColumns: "85% 15%" }}>
-                                <Header mode="secondary" style={{ float: "left" }}>Избранные игры</Header>
-                                <Header mode="secondary" style={{ float: "right" }}>Any%</Header>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 70px" }}>
+                                <Header mode="secondary" style={{ textAlign: "center" }}>Избранные игры</Header>
+                                <Header mode="secondary" style={{ textAlign: "center" }}>Any%</Header>
                             </div>
 
                             <div>
@@ -99,7 +99,7 @@ const StartPage = props => {
                                                         action: () => deleteGameFromFavourite(g.id || "")
                                                     }}
                                                 >
-                                                    <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }}
+                                                    <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3, width: '100%' }}
                                                         before={<Avatar mode="image" src={getLinkForGame(g)} />} onClick={() => {
                                                             setChangeGame({name: g.names?.international, id: g.id});
                                                             setActiveView('gameInfo');
@@ -151,9 +151,9 @@ const StartPage = props => {
                 <Group separator="hide">
                     <CardGrid>
                         <Card size="l">
-                            <div style={{ display: "grid", gridTemplateColumns: "80% 20%" }}>
-                                <Header mode="secondary" style={{ float: "left" }}>Последние раны</Header>
-                                <Header mode="secondary" style={{ float: "right" }}>Сегодня</Header>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 90px" }}>
+                                <Header mode="secondary" style={{ textAlign: "center" }}>Последние раны</Header>
+                                <Header mode="secondary" style={{ textAlign: "left" }}>Сегодня</Header>
                             </div>
                             <div style={{ height: 260 }}>
                                 {!latestRuns && <Spinner />}
