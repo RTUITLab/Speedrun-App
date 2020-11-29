@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {CSSProperties, useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import {Avatar, Cell, Footer, Panel, PanelHeader, Div} from '@vkontakte/vkui'
+import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner} from '@vkontakte/vkui'
 import CardGrid from "@vkontakte/vkui/dist/components/CardGrid/CardGrid";
 import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
@@ -9,10 +9,20 @@ import Group from "@vkontakte/vkui/dist/components/Group/Group";
 import {Game, StreamsService} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
+import {Icon24User} from "@vkontakte/icons";
 
 const ProfilePage = (props) => {
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
 
+    const itemStyle = {
+        flexShrink: 0,
+        width: 80,
+        height: 94,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: 12
+    } as CSSProperties;
 
     useEffect(() => {
         async function fetchGamesList() {
@@ -90,6 +100,97 @@ const ProfilePage = (props) => {
                     </Card>
                 </CardGrid>
             </Group>
+            <Group  header={<Header mode="secondary">Мои доны</Header>} separator="hide">
+                <HorizontalScroll>
+                    <div style={{ display: 'flex' }}>
+                        <div style={{ ...itemStyle, paddingLeft: 4 }}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Элджей
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Ольга
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Сергей
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Илья
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Алексей
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Костя
+                        </div>
+                        <div style={itemStyle}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Миша
+                        </div>
+                        <div style={{ ...itemStyle, paddingRight: 4 }}>
+                            <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                            Вадим
+                        </div>
+                    </div>
+                </HorizontalScroll>
+            </Group>
+            <Group  header={<Header mode="secondary">Слежу за</Header>} separator="hide">
+                <div style={{ display: 'flex' }}>
+                    <div style={{ ...itemStyle, paddingLeft: 4 }}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Элджей
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Ольга
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Сергей
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Илья
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Алексей
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Костя
+                    </div>
+                    <div style={itemStyle}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Миша
+                    </div>
+                    <div style={{ ...itemStyle, paddingRight: 4 }}>
+                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
+                        Вадим
+                    </div>
+                </div>
+            </Group>
+
+            <Banner
+                mode="image"
+                header="Избранные гайды"
+                subheader="Здесь хранятся понравившиеся вам гайды по гличам и скипам в играх."
+                background={
+                    <div
+                        style={{
+                            backgroundColor: '#65c063',
+                            backgroundImage: 'url(https://sun9-59.userapi.com/7J6qHkTa_P8VKRTO5gkh6MizcCEefz04Y0gDmA/y6dSjdtPU4U.jpg)',
+                            backgroundPosition: 'right bottom',
+                            backgroundSize: 320,
+                            backgroundRepeat: 'no-repeat',
+                        }}
+                    />
+                }
+            />
         </Panel>
     )
 }
