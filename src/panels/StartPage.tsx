@@ -131,6 +131,17 @@ const StartPage = props => {
                 </Group>
                 <Group style={{ paddingBottom: 8 }} header={<Header mode="secondary">Популярные стримы</Header>}>
                     <CardScroll>
+                        {!streamsList && [1, 2, 3].map(i =>
+                            <Card key={i} size="s">
+                                <div style={{ width: 224, height: 225 }}>
+                                    <Cell style={{ marginTop: 0, marginLeft: 3 }} >
+                                        <div style={{ width: "100$", textAlign: "left" }}>
+                                            <Spinner />
+                                        </div>
+                                    </Cell>
+                                </div>
+                            </Card>)}
+
                         {streamsList &&
                             streamsList.map(s =>
                                 <Card key={s.id} size="s" onClick={() => props.goTo('video', s.twichUrl, 'startPage')}>
