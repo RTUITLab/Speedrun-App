@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {
     Avatar,
     Text,
-    Group, WriteBar, WriteBarIcon,Tabs, TabsItem, SimpleCell
+    Group, WriteBar, WriteBarIcon, Tabs, TabsItem, SimpleCell, ActionSheet, ActionSheetItem, View
 } from '@vkontakte/vkui';
 import {
     Icon28CameraOutline,
@@ -26,8 +26,8 @@ type PulsePageState = {
     mode: string,
     activeTab5: string,
     messages: Array<PulseMessageResponse>,
-    users: Array<User>
-
+    users: Array<User>,
+    popout: any
 }
 
 type User = {
@@ -50,10 +50,11 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
             mode: 'all',
             activeTab5: 'all',
             messages: [],
-            users: []
+            users: [],
+            popout: null
         };
-
-    this.select = this.select.bind(this);
+        this.openBase = this.openBase.bind(this);
+        this.select = this.select.bind(this);
     }
 
     fetchUsers = async (ids: Array<string>) => {        
@@ -82,10 +83,22 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
         this.fetchUsers(ids);
     }
 
-    // async sendMessage(id: string){
-    //     await PulseService.sendPulseMessage(this.props.idGame, id)
-    // }
-
+    openBase () {
+        this.setState({ popout:
+                <ActionSheet onClose={() => this.setState({ popout: null })}>
+                    <ActionSheetItem autoclose>
+                        Отправить донат
+                    </ActionSheetItem>
+                    <ActionSheetItem autoclose>
+                        Отслеживать
+                    </ActionSheetItem>
+                    <ActionSheetItem autoclose>
+                        Пожаловаться
+                    </ActionSheetItem>
+                    {<ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>}
+                </ActionSheet>
+        });
+    }
 
     select(e) {
         const mode = e.currentTarget.dataset.mode;
@@ -99,6 +112,8 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
             messages: [pulseMessageResponse,...this.state.messages]
         })
     }
+
+
 
     render()
     {
@@ -155,15 +170,17 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
                         </TabsItem>
                     </Tabs>
                 </Group>
-
+            <View popout={this.state.popout}>
                 <Group>
                     {this.state.messages.length> 0 && this.state.messages.map((m) =>
                         (<div>
-                            <SimpleCell before={<Avatar size={48} src={this.state.users.find(U => m.userId === U.id+'')?.photo_200} />} after={<Icon28MoreHorizontal />}>{this.state.users.find(U => m.userId === U.id+'')?.name}</SimpleCell>
+                            <SimpleCell before={<Avatar size={48} src={this.state.users.find(U => m.userId === U.id+'')?.photo_200} />} after={<Icon28MoreHorizontal  onClick={this.openBase}/>}>{this.state.users.find(U => m.userId === U.id+'')?.name}</SimpleCell>
+
                             <Text weight="regular" style={{ margin: 16 }}>{m.message}</Text>
                         </div>))
                     }
                 </Group>
+            </View>
             </Group>
         )
     }
@@ -172,41 +189,3 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
 
  export default PulsePage
 
-
- //<div style={{
-//     position: "relative",
-//         backgroundColor: 'gray',
-//         margin: 16,
-//         height: 50,
-//         width: 100,
-//         display: 'flex',
-//         alignItems: 'flex-end',
-//         justifyContent: 'center',
-//         paddingBottom: '6px',
-//         borderRadius: 25
-// }}>
-// <div style={{
-//     position:"absolute",
-//         top:"50%",
-//         left:"25%",
-//         transform: "translate(-50%, -50%)"
-// }}>
-// <Icon28SmileOutline/>
-// </div>
-// <div style={{
-//     position:"absolute",
-//         top:"50%",
-//         left:"50%",
-//         transform: "translate(-50%, -50%)"
-// }}>
-// <Icon28SmileOutline/>
-// </div>
-// <div style={{
-//     position:"absolute",
-//         top:"50%",
-//         left:"75%",
-//         transform: "translate(-50%, -50%)"
-// }}>
-// <Icon28SmileOutline/>
-// </div>
-// </div>
