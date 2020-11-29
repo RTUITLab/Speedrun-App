@@ -26,7 +26,7 @@ function Table({columns, data}) {
             {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map(column => (
-                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                        <th style={{background: 'var(--button_primary_background)', borderColor: 'var(--button_primary_background)', color: 'var(--button_primary_foreground)'}} {...column.getHeaderProps()}>{column.render('Header')}</th>
                     ))}
                 </tr>
             ))}
