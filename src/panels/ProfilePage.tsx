@@ -24,6 +24,7 @@ const ProfilePage = (props) => {
     const [activeView, setActiveView] = useState<string>('profile');
     const [checkBox, setCheckBox] = useState<boolean>(false);
     const [changeGame, setChangeGame] = useState<Game | null>(null);
+    const [boolTrack, setBoolTrack] = useState<boolean>(false);
 
     const [subscriptions, setSubscriptions] = useState<Array<User>>([]);
     const [subscribers, setSubscribers] = useState<Array<User>>([]);
@@ -64,6 +65,7 @@ const ProfilePage = (props) => {
 
 
         fetchGamesList().then(r => console.log("Done"));
+        if (!boolTrack)
         fetchSubscriptions();
     })
 
@@ -98,6 +100,7 @@ const ProfilePage = (props) => {
         });
         setSubscriptions(m1);
         setSubscribers(m2);
+        setBoolTrack(true);
     }
 
     async function deleteGameFromFavourite(id: string): Promise<void> {
