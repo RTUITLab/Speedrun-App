@@ -1,6 +1,6 @@
 import React, {CSSProperties, useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch} from '@vkontakte/vkui'
+import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch, View} from '@vkontakte/vkui'
 import CardGrid from "@vkontakte/vkui/dist/components/CardGrid/CardGrid";
 import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
@@ -10,13 +10,15 @@ import {Game, StreamsService} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
 import {Icon24User} from "@vkontakte/icons";
+import GamePage from "./GamePage";
 
 const ProfilePage = (props) => {
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
-
+    const [activeView, setActiveView] = useState<string>('profile');
     const [checkBox, setCheckBox] = useState<boolean>(false);
+    const [changeGame, setChangeGame] = useState<Game | null>(null);
 
-    const onChange = () => {
+    const onChangeToCheckBox = () => {
         if (checkBox)
             setCheckBox(false)
         else
@@ -68,7 +70,8 @@ const ProfilePage = (props) => {
     }
 
     return (
-        <Panel>
+        <View id={props.id} activePanel={activeView}>
+        <Panel id='profile'>
             <PanelHeader>Профиль</PanelHeader>
             <Group separator="hide">
                 <CardGrid>
@@ -88,7 +91,10 @@ const ProfilePage = (props) => {
                                             }}
                                         >
                                             <Cell key={g.id} style={{marginTop: 0, marginLeft: 3}}
-                                                  before={<Avatar mode="image" src={getLinkForGame(g)}/>}>
+                                                  before={<Avatar mode="image" src={getLinkForGame(g)}/>} onClick={() => {
+                                                      setChangeGame(g);
+                                                      setActiveView('gameInfo');
+                                            }}>
                                                 <div style={{width: "100$", textAlign: "center"}}>
                                                     <div style={{float: "left"}}>
                                                         {g.names?.international || "no name"}
@@ -220,11 +226,15 @@ const ProfilePage = (props) => {
             )}
 
             <Group>
-                <Cell asideContent={<Switch value={checkBox+''} onChange={onChange}/>}>
+                <Cell asideContent={<Switch value={checkBox+''} onChange={onChangeToCheckBox}/>}>
                    Я раннер
                 </Cell>
             </Group>
         </Panel>
+            <Panel id='gameInfo'>
+                <GamePage id='gameInfo' goTo={(a) => setActiveView('profile')} game={{id: changeGame?.id, gameName: changeGame?.names?.international}} />
+            </Panel>
+        </View>
     )
 }
 
