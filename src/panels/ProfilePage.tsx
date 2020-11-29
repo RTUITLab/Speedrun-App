@@ -49,9 +49,8 @@ const ProfilePage = (props) => {
     }
 
     useEffect(() => {
-        // AccountService.isRunner().then((b)=>{
-        //     console.log(b);
-        //     setCheckBox(b);});
+        AccountService.isRunner().then((b)=>{
+            setCheckBox(b);});
         async function fetchGamesList() {
 
 
