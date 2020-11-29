@@ -88,7 +88,7 @@ const StartPage = props => {
                             </div>
 
                             <div>
-                                {favoriteGames &&
+                                {favoriteGames && (
                                     <SwipeableList>
                                         {
                                             favoriteGames.map(g =>
@@ -118,11 +118,12 @@ const StartPage = props => {
                                             )
                                         }
                                     </SwipeableList>
+                                    )
                                 }
-                                {favoriteGames?.length === 0 && <Cell>
+                                {favoriteGames?.length === 0 && <Group style={{padding: '10px'}}>
                                     Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
                                     свайп вправо!
-                            </Cell>}
+                            </Group>}
                                 {!favoriteGames && <Cell style={{ textAlign: "center" }}><Spinner /></Cell>}
                             </div>
                         </Card>
