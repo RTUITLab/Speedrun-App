@@ -11,7 +11,7 @@ import { Avatar, Cell, CardScroll, Search, Spinner, View } from '@vkontakte/vkui
 import { FavoriteService } from '../services/FavoritesService';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import mc from '../img/MineCraft.jpg';
-import { Game, Stream, StreamsService, Run1 } from "../api";
+import { Game, Stream, StreamsService } from "../api";
 import { Div } from '@vkontakte/vkui';
 import GamePage from "./GamePage";
 import { RunsService } from '../api/services/RunsService';
@@ -22,7 +22,7 @@ const StartPage = props => {
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
 
     const [activeView, setActiveView] = useState<string>('main');
-    const [changeGame, setChangeGame] = useState<{name: string | null | undefined,  id: string | null | undefined} | null>(null);
+    const [changeGame, setChangeGame] = useState<{ name: string | null | undefined, id: string | null | undefined } | null>(null);
     const [latestRuns, setLatestRuns] = useState<Array<RunModel> | null>(null);
 
     useEffect(() => {
@@ -53,7 +53,6 @@ const StartPage = props => {
             newList.push(G.id || '');
         });
         await FavoriteService.setFavoriteGames(newList);
-        const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
     }
@@ -101,7 +100,7 @@ const StartPage = props => {
                                                 >
                                                     <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3, width: '100%' }}
                                                         before={<Avatar mode="image" src={getLinkForGame(g)} />} onClick={() => {
-                                                            setChangeGame({name: g.names?.international, id: g.id});
+                                                            setChangeGame({ name: g.names?.international, id: g.id });
                                                             setActiveView('gameInfo');
                                                         }}>
                                                         <div style={{ width: "100$", textAlign: "center" }}>
@@ -109,8 +108,8 @@ const StartPage = props => {
                                                                 {g.names?.international || "no name"}
                                                             </div>
                                                             <div style={{ float: "right" }}>
-                                                                <div style={{ fontSize: "16px" }}>13m 54c</div>
-                                                                <div style={{ fontSize: "12px" }}>-22s</div>
+                                                                <div style={{ fontSize: "16px" }}>{g.favoriteTime}</div>
+                                                                {/* <div style={{ fontSize: "12px" }}>-22s</div> */}
                                                             </div>
                                                         </div>
                                                     </Cell>
@@ -118,9 +117,9 @@ const StartPage = props => {
                                             )
                                         }
                                     </SwipeableList>
-                                    )
+                                )
                                 }
-                                {favoriteGames?.length === 0 && <Group style={{padding: '10px'}}>
+                                {favoriteGames?.length === 0 && <Group style={{ padding: '10px' }}>
                                     Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
                                     свайп вправо!
                             </Group>}
@@ -131,6 +130,17 @@ const StartPage = props => {
                 </Group>
                 <Group style={{ paddingBottom: 8 }} header={<Header mode="secondary">Популярные стримы</Header>}>
                     <CardScroll>
+                        {!streamsList && [1, 2, 3].map(i =>
+                            <Card key={i} size="s">
+                                <div style={{ width: 224, height: 225 }}>
+                                    <Cell style={{ marginTop: 0, marginLeft: 3 }} >
+                                        <div style={{ width: "100$", textAlign: "left" }}>
+                                            <Spinner />
+                                        </div>
+                                    </Cell>
+                                </div>
+                            </Card>)}
+
                         {streamsList &&
                             streamsList.map(s =>
                                 <Card key={s.id} size="s" onClick={() => props.goTo('video', s.twichUrl, 'startPage')}>
@@ -166,7 +176,7 @@ const StartPage = props => {
                                         <div style={{ width: "100$", textAlign: "center" }}>
                                             <div style={{ float: "left" }}>
                                                 <div style={{ fontSize: "16px" }}>{r.game?.data?.names?.international}</div>
-                                                <div style={{ fontSize: "12px", textAlign:'left' }}>{r.players?.data ? r.players?.data[0].names?.international : ""}</div>
+                                                <div style={{ fontSize: "12px", textAlign: 'left' }}>{r.players?.data ? r.players?.data[0].names?.international : ""}</div>
                                             </div>
                                             <div style={{ float: "right" }}>
                                                 <div style={{ fontSize: "12px" }}>{r.times?.prettyTime}</div>

@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 
 import { OpenAPI } from './api/core/OpenAPI';
-import { FavoriteService } from './services/FavoritesService';
 
 OpenAPI.BASE = process.env.REACT_APP_BACKEND_URL || 'https://localhost:5001';
 

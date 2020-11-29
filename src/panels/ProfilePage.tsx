@@ -1,15 +1,15 @@
-import React, {CSSProperties, useEffect, useState} from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
-import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch, View} from '@vkontakte/vkui'
+import { Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch, View, Spinner } from '@vkontakte/vkui'
 import CardGrid from "@vkontakte/vkui/dist/components/CardGrid/CardGrid";
 import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
-import {SwipeableList, SwipeableListItem} from "@sandstreamdev/react-swipeable-list";
+import { SwipeableList, SwipeableListItem } from "@sandstreamdev/react-swipeable-list";
 import Group from "@vkontakte/vkui/dist/components/Group/Group";
-import {AccountService, Game, GamesService, PulseService} from "../api";
-import {FavoriteService} from "../services/FavoritesService";
+import { AccountService, Game, GamesService, PulseService } from "../api";
+import { FavoriteService } from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
-import {Icon24User} from "@vkontakte/icons";
+import { Icon24User } from "@vkontakte/icons";
 import GamePage from "./GamePage";
 import bridge from "@vkontakte/vk-bridge";
 
@@ -24,6 +24,7 @@ const ProfilePage = (props) => {
     const [activeView, setActiveView] = useState<string>('profile');
     const [checkBox, setCheckBox] = useState<boolean>(false);
     const [changeGame, setChangeGame] = useState<Game | null>(null);
+    const [boolTrack, setBoolTrack] = useState<boolean>(false);
 
     const [subscriptions, setSubscriptions] = useState<Array<User>>([]);
     const [subscribers, setSubscribers] = useState<Array<User>>([]);
@@ -49,8 +50,9 @@ const ProfilePage = (props) => {
     }
 
     useEffect(() => {
-        AccountService.isRunner().then((b)=>{
-            setCheckBox(b);});
+        AccountService.isRunner().then((b) => {
+            setCheckBox(b);
+        });
         async function fetchGamesList() {
 
 
@@ -63,21 +65,22 @@ const ProfilePage = (props) => {
 
 
         fetchGamesList().then(r => console.log("Done"));
+        if (!boolTrack)
         fetchSubscriptions();
     })
 
     const fetchSubscriptions = async () => {
         const subscriptions = await PulseService.getMySubscriptions();
         const subscribers = await PulseService.getMySubscribers();
-        const token = await (await bridge.send("VKWebAppGetAuthToken", {"app_id": 7679570, "scope": ""})).access_token;
+        const token = await (await bridge.send("VKWebAppGetAuthToken", { "app_id": 7679570, "scope": "" })).access_token;
 
         const responce1 = (await bridge.send("VKWebAppCallAPIMethod", {
             "method": "users.get",
-            "params": {"user_ids": subscriptions.join(','), "v": "5.126", "access_token": token, "fields": "photo_200"}
+            "params": { "user_ids": subscriptions.join(','), "v": "5.126", "access_token": token, "fields": "photo_200" }
         })).response;
         const responce2 = (await bridge.send("VKWebAppCallAPIMethod", {
             "method": "users.get",
-            "params": {"user_ids": subscribers.join(','), "v": "5.126", "access_token": token, "fields": "photo_200"}
+            "params": { "user_ids": subscribers.join(','), "v": "5.126", "access_token": token, "fields": "photo_200" }
         })).response;
         let m1: Array<User> = [];
         let m2: Array<User> = [];
@@ -97,6 +100,7 @@ const ProfilePage = (props) => {
         });
         setSubscriptions(m1);
         setSubscribers(m2);
+        setBoolTrack(true);
     }
 
     async function deleteGameFromFavourite(id: string): Promise<void> {
@@ -105,7 +109,6 @@ const ProfilePage = (props) => {
             newList.push(G.id || '');
         });
         await FavoriteService.setFavoriteGames(newList);
-        const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
     }
@@ -132,25 +135,29 @@ const ProfilePage = (props) => {
                                 <Header mode="secondary">Избранные игры</Header>
                             </div>
                             <Div>
+                                {favoriteGames && favoriteGames.length == 0 && (<Group>
+                                    Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
+                                    свайп вправо!
+                                </Group>)}
                                 {favoriteGames && favoriteGames.length > 0 && (
                                     <SwipeableList>
                                         {favoriteGames && favoriteGames.map(g =>
                                             <SwipeableListItem
                                                 key={g.id}
                                                 swipeLeft={{
-                                                    content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из
+                                                    content: <Cell><Div style={{ color: '#ff5c5c' }}>Удалить из
                                                         избранного</Div></Cell>,
                                                     action: () => deleteGameFromFavourite(g.id || "")
                                                 }}
                                             >
-                                                <Cell key={g.id} style={{marginTop: 0, marginLeft: 3}}
-                                                      before={<Avatar mode="image" src={getLinkForGame(g)}/>}
-                                                      onClick={() => {
-                                                          setChangeGame(g);
-                                                          setActiveView('gameInfo');
-                                                      }}>
-                                                    <div style={{width: "100$", textAlign: "center"}}>
-                                                        <div style={{float: "left"}}>
+                                                <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }}
+                                                    before={<Avatar mode="image" src={getLinkForGame(g)} />}
+                                                    onClick={() => {
+                                                        setChangeGame(g);
+                                                        setActiveView('gameInfo');
+                                                    }}>
+                                                    <div style={{ width: "100$", textAlign: "center" }}>
+                                                        <div style={{ float: "left" }}>
                                                             {g.names?.international || "no name"}
                                                         </div>
                                                     </div>
@@ -158,12 +165,7 @@ const ProfilePage = (props) => {
                                             </SwipeableListItem>
                                         )}
                                     </SwipeableList>
-                                ) || (
-                                    <Group>
-                                        Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
-                                        свайп вправо!
-                                    </Group>
-                                )}
+                                ) || <Group><Spinner /></Group>}
 
                             </Div>
                         </Card>
@@ -171,11 +173,11 @@ const ProfilePage = (props) => {
                 </Group>
                 <Group header={<Header mode="secondary">{checkBox ? "Мои доны" : "Помогают"}</Header>} separator="hide">
                     <HorizontalScroll>
-                        <div style={{display: 'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             {
                                 subscribers.map(m => (
-                                    <div style={{...itemStyle, paddingLeft: 4, textAlign: 'center'}}>
-                                        <Avatar size={64} style={{marginBottom: 8}} src={m.photo_200}> </Avatar>
+                                    <div style={{ ...itemStyle, paddingLeft: 4, textAlign: 'center' }}>
+                                        <Avatar size={64} style={{ marginBottom: 8 }} src={m.photo_200}> </Avatar>
                                         {m.name}
                                     </div>
                                 ))
@@ -185,11 +187,11 @@ const ProfilePage = (props) => {
                 </Group>
                 <Group header={<Header mode="secondary">Слежу за</Header>} separator="hide">
                     <HorizontalScroll>
-                        <div style={{display: 'flex'}}>
+                        <div style={{ display: 'flex' }}>
                             {
                                 subscriptions.map(m => (
-                                    <div style={{...itemStyle, paddingLeft: 4, textAlign: 'center'}}>
-                                        <Avatar size={64} style={{marginBottom: 8}} src={m.photo_200}> </Avatar>
+                                    <div style={{ ...itemStyle, paddingLeft: 4, textAlign: 'center' }}>
+                                        <Avatar size={64} style={{ marginBottom: 8 }} src={m.photo_200}> </Avatar>
                                         {m.name}
                                     </div>
                                 ))
@@ -232,7 +234,7 @@ const ProfilePage = (props) => {
                 )}
 
                 <Group>
-                    <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox}/>}>
+                    <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox} />}>
                         Я раннер
                     </Cell>
 
@@ -240,7 +242,7 @@ const ProfilePage = (props) => {
             </Panel>
             <Panel id='gameInfo'>
                 <GamePage id='gameInfo' goTo={(a) => setActiveView('profile')}
-                          game={{id: changeGame?.id, gameName: changeGame?.names?.international}}/>
+                    game={{ id: changeGame?.id, gameName: changeGame?.names?.international }} />
             </Panel>
         </View>
     )
