@@ -10,7 +10,8 @@ import {
 } from '@vkontakte/icons';
 import image from '../MineCraft.jpg'
 import Icon28MoreHorizontal from '@vkontakte/icons/dist/28/more_horizontal';
-import {PulseMessageResponse, PulseService} from "../../api";
+import {GamesService, PulseMessageResponse, PulseService} from "../../api";
+import bridge from '@vkontakte/vk-bridge';
 
 
 type PulseProps = {
@@ -25,7 +26,15 @@ type PulsePageState = {
     mode: string,
     activeTab5: string,
     messages: Array<PulseMessageResponse>,
+    users: Array<User>,
     popout: any
+}
+
+type User = {
+    id: string,
+    name: string,
+    photo_200: string,
+    url: string
 }
 
 class PulsePage extends React.Component<PulseProps, PulsePageState>{
@@ -41,17 +50,37 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
             mode: 'all',
             activeTab5: 'all',
             messages: [],
+            users: [],
             popout: null
         };
         this.openBase = this.openBase.bind(this);
         this.select = this.select.bind(this);
     }
 
+    fetchUsers = async (ids: Array<string>) => {        
+        const token = await (await bridge.send("VKWebAppGetAuthToken", {"app_id": 7679570, "scope": ""})).access_token;
 
+        const responce = (await bridge.send("VKWebAppCallAPIMethod", {"method": "users.get", "params":  {"user_ids": ids.join(','), "v":"5.126", "access_token": token, "fields": "photo_200"}})).response;
+        let m: Array<User> = [];
+        responce.forEach(user => {
+            m.push({id: user.id, name: [user.first_name, user.last_name].join(' '), photo_200: user.photo_200, url: "https://vk.com/id"+user.id });
+        });
+        console.log(m);
+        this.setState({users: m});
+    }
 
     async componentDidMount(){
         const response = await PulseService.getAllPulseMessages(this.props.idGame)
         this.setState({messages: response} )
+        console.log(response);
+        
+        let ids: Array<any> = [];
+        response.forEach(u => {
+            if (!ids.find(U => U === u.userId)) {
+                ids.push(u.userId);
+            }
+        });
+        this.fetchUsers(ids);
     }
 
     openBase () {
@@ -145,7 +174,8 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
                 <Group>
                     {this.state.messages.length> 0 && this.state.messages.map((m) =>
                         (<div>
-                            <SimpleCell before={<Avatar size={48} src={image} />} after={<Icon28MoreHorizontal onClick={this.openBase}/>} description="Команда ВКонтакте">Игорь Фёдоров</SimpleCell>
+                            <SimpleCell before={<Avatar size={48} src={this.state.users.find(U => m.userId === U.id+'')?.photo_200} />} after={<Icon28MoreHorizontal  onClick={this.openBase}/>}>{this.state.users.find(U => m.userId === U.id+'')?.name}</SimpleCell>
+
                             <Text weight="regular" style={{ margin: 16 }}>{m.message}</Text>
                         </div>))
                     }
