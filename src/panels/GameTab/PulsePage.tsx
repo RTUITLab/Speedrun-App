@@ -51,7 +51,6 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
     async componentDidMount(){
         const response = await PulseService.getAllPulseMessages(this.props.idGame)
         this.setState({messages: response} )
-        console.log(response[0].message);
     }
 
     // async sendMessage(id: string){
