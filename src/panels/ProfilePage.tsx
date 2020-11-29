@@ -1,6 +1,6 @@
 import React, {CSSProperties, useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import {Avatar, Cell, Panel, PanelHeader, Div, HorizontalScroll, Banner} from '@vkontakte/vkui'
+import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch} from '@vkontakte/vkui'
 import CardGrid from "@vkontakte/vkui/dist/components/CardGrid/CardGrid";
 import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
@@ -13,6 +13,15 @@ import {Icon24User} from "@vkontakte/icons";
 
 const ProfilePage = (props) => {
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
+
+    const [checkBox, setCheckBox] = useState<boolean>(false);
+
+    const onChange = () => {
+        if (checkBox)
+            setCheckBox(false)
+        else
+            setCheckBox(true)
+    }
 
     const itemStyle = {
         flexShrink: 0,
@@ -100,7 +109,7 @@ const ProfilePage = (props) => {
                     </Card>
                 </CardGrid>
             </Group>
-            <Group  header={<Header mode="secondary">Мои доны</Header>} separator="hide">
+            <Group  header={<Header mode="secondary">{checkBox ? "Мои доны" : "Отслеживаю"}</Header>} separator="hide">
                 <HorizontalScroll>
                     <div style={{ display: 'flex' }}>
                         <div style={{ ...itemStyle, paddingLeft: 4 }}>
@@ -184,15 +193,37 @@ const ProfilePage = (props) => {
                 background={
                     <div
                         style={{
-                            backgroundColor: '#65c063',
-                            backgroundImage: 'url(https://sun9-59.userapi.com/7J6qHkTa_P8VKRTO5gkh6MizcCEefz04Y0gDmA/y6dSjdtPU4U.jpg)',
-                            backgroundPosition: 'right bottom',
-                            backgroundSize: 320,
-                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: '#3e96ff',
                         }}
                     />
                 }
             />
+
+            {checkBox && (
+                <Banner
+                    mode="image"
+                    header="Мои гайды"
+                    subheader="Здесь хранятся понравившиеся вам гайды по гличам и скипам в играх."
+                    background={
+                        <div
+                            style={{
+                                backgroundColor: '#7c3eff',
+                                backgroundImage: 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/WPSU_Barnstar.svg/216px-WPSU_Barnstar.svg.png)',
+                                backgroundPosition: 'right center',
+                                backgroundSize: 50,
+                                backgroundRepeat: 'no-repeat',
+
+                            }}
+                        />
+                    }
+                />
+            )}
+
+            <Group>
+                <Cell asideContent={<Switch value={checkBox+''} onChange={onChange}/>}>
+                   Я раннер
+                </Cell>
+            </Group>
         </Panel>
     )
 }
