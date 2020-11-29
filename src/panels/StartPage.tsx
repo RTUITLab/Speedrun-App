@@ -69,7 +69,7 @@ const StartPage = props => {
                             <Header mode="secondary" style={{ float: "right" }}>Any%</Header>
                         </div>
 
-                        <div style={{ height: 340 }}>
+                        <div>
                             {favoriteGames &&
                                 <SwipeableList>
                                     {
@@ -98,7 +98,10 @@ const StartPage = props => {
                                     }
                                 </SwipeableList>
                             }
-                            {favoriteGames?.length === 0 && <Cell style={{ textAlign: "center" }}>Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте свайп вправо!</Cell>}
+                            {favoriteGames?.length === 0 && <Cell>
+                                Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
+                                свайп вправо!
+                            </Cell>}
                             {!favoriteGames && <Cell style={{ textAlign: "center" }}><Spinner/></Cell>}
                         </div>
                     </Card>
