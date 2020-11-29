@@ -22,7 +22,7 @@ const StartPage = props => {
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
 
     const [activeView, setActiveView] = useState<string>('main');
-    const [changeGame, setChangeGame] = useState<Game | null>(null);
+    const [changeGame, setChangeGame] = useState<{name: string | null | undefined,  id: string | null | undefined} | null>(null);
     const [latestRuns, setLatestRuns] = useState<Array<RunModel> | null>(null);
 
     useEffect(() => {
@@ -30,6 +30,7 @@ const StartPage = props => {
             if (streamsList == null) {
                 const data = await StreamsService.getStreams()
                 setStreamsList(() => data);
+                console.log(data);
             }
             if (favoriteGames == null) {
                 const data = await FavoriteService.getFavoriteGames();
@@ -100,7 +101,7 @@ const StartPage = props => {
                                                 >
                                                     <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }}
                                                         before={<Avatar mode="image" src={getLinkForGame(g)} />} onClick={() => {
-                                                            setChangeGame(g);
+                                                            setChangeGame({name: g.names?.international, id: g.id});
                                                             setActiveView('gameInfo');
                                                         }}>
                                                         <div style={{ width: "100$", textAlign: "center" }}>
@@ -157,22 +158,23 @@ const StartPage = props => {
                             <div style={{ height: 260 }}>
                                 {!latestRuns && <Spinner />}
                                 {latestRuns && latestRuns.map(r =>
-                                    <Cell style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={getLinkForGame(r.game?.data)} />}>
+                                    <Cell onClick={() => {
+                                        setChangeGame({ id: r.game?.data?.id, name: r.game?.data?.names?.international });
+                                        setActiveView('gameInfo');
+                                    }} style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={getLinkForGame(r.game?.data)} />}>
                                         <div style={{ width: "100$", textAlign: "center" }}>
                                             <div style={{ float: "left" }}>
                                                 <div style={{ fontSize: "16px" }}>{r.game?.data?.names?.international}</div>
-                                                <div style={{ fontSize: "12px" }}>{r.players?.data ? r.players?.data[0].names?.international : ""}</div>
+                                                <div style={{ fontSize: "12px", textAlign:'left' }}>{r.players?.data ? r.players?.data[0].names?.international : ""}</div>
                                             </div>
                                             <div style={{ float: "right" }}>
                                                 <div style={{ fontSize: "12px" }}>{r.times?.prettyTime}</div>
                                                 {/* <div style={{ fontSize: "10px" }}>-22s</div>
                                                 <div style={{ fontSize: "10px" }}>-22s</div> */}
                                             </div>
+                                            {!favoriteGames && <Cell style={{ textAlign: "center" }}><Spinner /></Cell>}
                                         </div>
-                                    </Cell>
-                                )}
-
-
+                                    </Cell>)}
                             </div>
                         </Card>
                     </CardGrid>
@@ -180,7 +182,7 @@ const StartPage = props => {
                 <Footer>Property of RTUITLab</Footer>
             </Panel>
             <Panel id='gameInfo'>
-                <GamePage id='gameInfo' goTo={(a) => setActiveView('main')} game={{ id: changeGame?.id, gameName: changeGame?.names?.international }} />
+                <GamePage id='gameInfo' goTo={(a) => setActiveView('main')} game={{ id: changeGame?.id, gameName: changeGame?.name }} />
             </Panel>
         </View>
     );

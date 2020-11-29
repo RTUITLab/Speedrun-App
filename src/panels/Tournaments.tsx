@@ -73,7 +73,7 @@ const Tournaments = ({id, go}) => {
                                             <Text weight="medium" style={{paddingTop: 0}}>{t.gameTitle} - {t.nickName}</Text>
                                             <Text weight="regular" style={{paddingTop: 0, color: 'var(--text_secondary)'}}>Сегодня в {t.startTime}:00</Text>
                                         </Div>
-                                        <Icon16Play style={{paddingTop: 5}} onClick={() => go('video', t.twichUrl)} />
+                                        <Icon16Play style={{paddingTop: 5}} onClick={() => go('video', t.twichUrl, 'tournament')} />
                                     </Div>
                                 </Cell>
                             ))
