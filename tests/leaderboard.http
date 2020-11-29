@@ -64,3 +64,6 @@ true
 ###
 
 GET {{host}}/api/tournament
+
+###
+GET {{host}}/api/runs
