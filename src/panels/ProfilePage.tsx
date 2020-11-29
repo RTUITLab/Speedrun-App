@@ -233,7 +233,7 @@ const ProfilePage = (props) => {
 
             <Group>
                 <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox} />}>
-                    {checkBox}
+                    Я раннер
                 </Cell>
 
             </Group>
