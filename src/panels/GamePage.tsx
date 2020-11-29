@@ -54,7 +54,7 @@ const GamePage = (props) => {
                 'stream': <p>Stream</p>,
                 'rules': <Rules game={props.game}/>,
                     'guid': <GidePage id={props.game.id}/>,
-                    'pulse': <PulsePage/>
+                    'pulse': <PulsePage idGame={props.game.id}/>
                 }[activeTab]
                 }
 
