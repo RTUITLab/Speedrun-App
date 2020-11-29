@@ -20,6 +20,7 @@ const App = () => {
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
 	const [tourPanel, setTourPanel] = useState('tournament');
 	const [videoId, setVideoId] = useState('');
+	const [back, setBack] = useState('startPage');
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data } }) => {
@@ -75,9 +76,10 @@ const App = () => {
 		setActivePanel(str);
 	};
 
-	const goTour = (to, id) => {
-		setVideoId(id);
-		setTourPanel(to);
+	const goTour = (to, id?, back?) => {
+		setVideoId(id || '');
+		setActivePanel(to);
+		setBack(back || 'startPage');
 	}
 
 	const setStore = e => {
@@ -287,15 +289,17 @@ const App = () => {
 					ref={gamesRef}
 				/>
 			</View>
-			<View id="tournaments" activePanel={tourPanel} popout={popout}>
+			<View id="tournaments" activePanel='tournament' popout={popout}>
 				<Tournaments id='tournament' go={goTour} />
-				<PlayVideo id='video' link={videoId} go={setTourPanel} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
-				<StartPage id='startPage' goTo={goTo}/>
+				<StartPage id='startPage' goTo={goTour}/>
 			</View>
 			<View id="profile" activePanel="profile" popout={popout}>
 				<ProfilePage id='profile' go={goBack}/>
+			</View>
+			<View id="video" activePanel="video" popout={popout}>
+				<PlayVideo id='video' link={videoId} back={back} go={goTour}/>
 			</View>
 		</Epic>
 	);
