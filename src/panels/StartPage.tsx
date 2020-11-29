@@ -11,7 +11,7 @@ import { Avatar, Cell, CardScroll, Search, Spinner, View } from '@vkontakte/vkui
 import { FavoriteService } from '../services/FavoritesService';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import mc from '../img/MineCraft.jpg';
-import { Game, Stream, StreamsService, Run1 } from "../api";
+import { Game, Stream, StreamsService } from "../api";
 import { Div } from '@vkontakte/vkui';
 import GamePage from "./GamePage";
 import { RunsService } from '../api/services/RunsService';
@@ -53,7 +53,6 @@ const StartPage = props => {
             newList.push(G.id || '');
         });
         await FavoriteService.setFavoriteGames(newList);
-        const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
     }

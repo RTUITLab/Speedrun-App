@@ -1,15 +1,14 @@
 import React, {CSSProperties, useEffect, useState} from "react";
 import PropTypes from 'prop-types';
-import {Avatar, Cell, Footer, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch, View} from '@vkontakte/vkui'
+import {Avatar, Cell, Panel, PanelHeader, Div, HorizontalScroll, Banner, Switch, View} from '@vkontakte/vkui'
 import CardGrid from "@vkontakte/vkui/dist/components/CardGrid/CardGrid";
 import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
 import {SwipeableList, SwipeableListItem} from "@sandstreamdev/react-swipeable-list";
 import Group from "@vkontakte/vkui/dist/components/Group/Group";
-import {AccountService, Game, GamesService, PulseService} from "../api";
+import {AccountService, Game, PulseService} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
-import {Icon24User} from "@vkontakte/icons";
 import GamePage from "./GamePage";
 import bridge from "@vkontakte/vk-bridge";
 
@@ -105,7 +104,6 @@ const ProfilePage = (props) => {
             newList.push(G.id || '');
         });
         await FavoriteService.setFavoriteGames(newList);
-        const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
     }

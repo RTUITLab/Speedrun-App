@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Dispatch, SetStateAction, useRef, createRef, RefObject } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, createRef } from 'react';
 import bridge, { UpdateConfigData } from '@vkontakte/vk-bridge';
 import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, ModalRoot, ModalPage, ModalPageHeader, PanelHeaderButton, FormLayout, Select, Checkbox, Button } from '@vkontakte/vkui'
 import '@vkontakte/vkui/dist/vkui.css';
@@ -18,7 +18,6 @@ const App = () => {
 	const [unofficial, setUnofficial]: [boolean, Dispatch<SetStateAction<any>>] = useState(false);
 	const [activePanel, setActivePanel] = useState('startPage');
 	const [popout, setPopout] = useState<React.SetStateAction<JSX.Element> | null>(<ScreenSpinner />);
-	const [tourPanel, setTourPanel] = useState('tournament');
 	const [videoId, setVideoId] = useState('');
 	const [back, setBack] = useState('startPage');
 

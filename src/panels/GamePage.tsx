@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Panel, PanelHeader, PanelHeaderBack, Tabs, HorizontalScroll, TabsItem, Group} from '@vkontakte/vkui'
-import type { GameCompact } from '../api/models/GameCompact';
+import {Panel, PanelHeader, PanelHeaderBack, Tabs, HorizontalScroll, TabsItem} from '@vkontakte/vkui'
 import TopPage from './GameTab/TopPage';
 import { GamesService } from '../api';
 import Rules from './GameTab/Rules';
