@@ -73,7 +73,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
             <View id={this.props.id} activePanel={this.state.activeView}>
                 <Panel id='list'>
 
-                    <PanelHeader
+                    <PanelHeader separator={false}
                         left={<PanelHeaderBack onClick={this.props.goBack} data-to="startPage" />}>
                         Игры
             </PanelHeader>

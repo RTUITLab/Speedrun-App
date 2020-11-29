@@ -8,9 +8,8 @@ import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline, Icon28Profile }
 import GamesList from './panels/GamesList';
 import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
-
+import ProfilePage from './panels/ProfilePage'
 import PlayVideo from "./panels/PlayVideo";
-import Persik from "./panels/Persik";
 
 const App = () => {
 	const [activeModal, setActiveModal]: [any, Dispatch<SetStateAction<any>>] = useState(null);
@@ -272,7 +271,7 @@ const App = () => {
 				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Общее" data-story="startPage">
 					<Icon28GameOutline />
 				</TabbarItem>
-				<TabbarItem onClick={setStore} selected={activePanel === "persik"} text="Профиль" data-story="persik">
+				<TabbarItem onClick={setStore} selected={activePanel === "profile"} text="Профиль" data-story="profile">
 					<Icon28Profile />
 				</TabbarItem>
 			</Tabbar>
@@ -295,8 +294,8 @@ const App = () => {
 			<View id="startPage" activePanel="startPage" popout={popout}>
 				<StartPage id='startPage' goTo={goTo}/>
 			</View>
-			<View id="persik" activePanel="persik" popout={popout}>
-				<Persik id='persik' go={goBack}/>
+			<View id="profile" activePanel="profile" popout={popout}>
+				<ProfilePage id='profile' go={goBack}/>
 			</View>
 		</Epic>
 	);
