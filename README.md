@@ -4,7 +4,7 @@ Speedrunner VK Mini app from RealityShift team.
 | Backend       |                                                                                                                                                                                                                                                         |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Repo          | [https://github.com/RTUITLab/Speedrun-App-Back](https://github.com/RTUITLab/Speedrun-App-Back)                                                                                                                                                          |
-| Deploy status | Backend deploy status: [![Build Status](https://dev.azure.com/rtuitlab/RTU%20IT%20Lab/_apis/build/status/RTUITLab.Speedrun-App-Back?branchName=master)](https://dev.azure.com/rtuitlab/RTU%20IT%20Lab/_build/latest?definitionId=141&branchName=master) |
+| Deploy status | [![Build Status](https://dev.azure.com/rtuitlab/RTU%20IT%20Lab/_apis/build/status/RTUITLab.Speedrun-App-Back?branchName=master)](https://dev.azure.com/rtuitlab/RTU%20IT%20Lab/_build/latest?definitionId=141&branchName=master) |
 
 ## Available Scripts
 ****
