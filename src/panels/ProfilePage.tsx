@@ -6,7 +6,7 @@ import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
 import {SwipeableList, SwipeableListItem} from "@sandstreamdev/react-swipeable-list";
 import Group from "@vkontakte/vkui/dist/components/Group/Group";
-import {Game} from "../api";
+import {AccountService, Game} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
 import {Icon24User} from "@vkontakte/icons";
@@ -18,11 +18,9 @@ const ProfilePage = (props) => {
     const [checkBox, setCheckBox] = useState<boolean>(false);
     const [changeGame, setChangeGame] = useState<Game | null>(null);
 
-    const onChangeToCheckBox = () => {
-        if (checkBox)
-            setCheckBox(false)
-        else
-            setCheckBox(true)
+    const onChangeToCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        setRunner(!checkBox).then(() => setCheckBox(!checkBox))
     }
 
     const itemStyle = {
@@ -35,8 +33,18 @@ const ProfilePage = (props) => {
         fontSize: 12
     } as CSSProperties;
 
+    async function setRunner(isRunner) {
+        await AccountService.setIsRunner(isRunner);
+    }
+
     useEffect(() => {
+        // AccountService.isRunner().then((b)=>{
+        //     console.log(b);
+        //     setCheckBox(b);});
         async function fetchGamesList() {
+
+
+
             if (favoriteGames == null) {
                 const data = await FavoriteService.getFavoriteGames();
 
@@ -105,17 +113,17 @@ const ProfilePage = (props) => {
                                     )}
                                 </SwipeableList>
                             ) || (
-                                <Cell>
+                                <Group>
                                     Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
                                     свайп вправо!
-                                </Cell>
+                                </Group>
                             )}
 
                         </Div>
                     </Card>
                 </CardGrid>
             </Group>
-            <Group  header={<Header mode="secondary">{checkBox ? "Мои доны" : "Отслеживаю"}</Header>} separator="hide">
+            <Group  header={<Header mode="secondary">{checkBox ? "Мои доны" : "Помогаю"}</Header>} separator="hide">
                 <HorizontalScroll>
                     <div style={{ display: 'flex' }}>
                         <div style={{ ...itemStyle, paddingLeft: 4 }}>
@@ -226,9 +234,10 @@ const ProfilePage = (props) => {
             )}
 
             <Group>
-                <Cell asideContent={<Switch value={checkBox+''} onChange={onChangeToCheckBox}/>}>
-                   Я раннер
+                <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox} />}>
+                    {checkBox}
                 </Cell>
+
             </Group>
         </Panel>
             <Panel id='gameInfo'>
