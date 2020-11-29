@@ -27,6 +27,7 @@ type PulsePageState = {
     activeTab5: string,
     messages: Array<PulseMessageResponse>,
     users: Array<User>,
+    changeUser: string,
     popout: any
 }
 
@@ -51,6 +52,7 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
             activeTab5: 'all',
             messages: [],
             users: [],
+            changeUser: '',
             popout: null
         };
         this.openBase = this.openBase.bind(this);
@@ -89,7 +91,7 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
                     <ActionSheetItem autoclose>
                         Отправить донат
                     </ActionSheetItem>
-                    <ActionSheetItem autoclose>
+                    <ActionSheetItem autoclose onClick={() => {this.sub(this.state.changeUser)}}>
                         Отслеживать
                     </ActionSheetItem>
                     <ActionSheetItem autoclose>
@@ -98,6 +100,10 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
                     {<ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>}
                 </ActionSheet>
         });
+    }
+
+    async sub (id: string) {
+        await PulseService.subsribeToUser(id)
     }
 
     select(e) {
@@ -174,7 +180,10 @@ class PulsePage extends React.Component<PulseProps, PulsePageState>{
                 <Group>
                     {this.state.messages.length> 0 && this.state.messages.map((m) =>
                         (<div>
-                            <SimpleCell before={<Avatar size={48} src={this.state.users.find(U => m.userId === U.id+'')?.photo_200} />} after={<Icon28MoreHorizontal  onClick={this.openBase}/>}>{this.state.users.find(U => m.userId === U.id+'')?.name}</SimpleCell>
+                            <SimpleCell before={<Avatar size={48} src={this.state.users.find(U => m.userId === U.id+'')?.photo_200} />} after={<Icon28MoreHorizontal  onClick={() => {
+                                this.setState({changeUser: m.userId!})
+                                this.openBase()
+                            }}/>}>{this.state.users.find(U => m.userId === U.id+'')?.name}</SimpleCell>
 
                             <Text weight="regular" style={{ margin: 16 }}>{m.message}</Text>
                         </div>))
