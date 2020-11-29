@@ -1,57 +1,75 @@
-import React, {Component, Dispatch, SetStateAction, useEffect,Fragment, useImperativeHandle, useRef, useState} from 'react';
+import React, {Fragment} from 'react';
 import {
-    Panel,
-    PanelHeader,
-    List,
-    Cell,
     Avatar,
-    Search,
-    PanelHeaderBack,
-    View,
-    Button,
     Text,
-    Group, WriteBar, WriteBarIcon, FixedLayout, Separator, Tabs, TabsItem, Counter, SimpleCell, UsersStack
+    Group, WriteBar, WriteBarIcon,Tabs, TabsItem, SimpleCell
 } from '@vkontakte/vkui';
 import {
-    Icon24Filter,
     Icon28CameraOutline,
-    Icon28KeyboardBotsOutline, Icon28MessageOutline,
     Icon28SmileOutline,
-    Icon28VoiceOutline
 } from '@vkontakte/icons';
 import image from '../MineCraft.jpg'
 import Icon28MoreHorizontal from '@vkontakte/icons/dist/28/more_horizontal';
+import {PulseMessageResponse, PulseService} from "../../api";
 
-type GuidesPageState = {
+
+type PulseProps = {
+    idGame: string
+}
+
+type PulsePageState = {
     text1: string,
     text3: string,
     activePanel: string,
     contextOpened: false,
     mode: string,
     activeTab5: string,
+    messages: Array<PulseMessageResponse>
+
 }
 
-class PulsePage extends React.Component<{}, GuidesPageState>{
+class PulsePage extends React.Component<PulseProps, PulsePageState>{
 
     constructor (props) {
         super(props);
 
         this.state = {
             text1: "",
-            text3: "",
+            text3: "hey",
             activePanel: 'panel1',
             contextOpened: false,
             mode: 'all',
             activeTab5: 'all',
+            messages: []
         };
 
     this.select = this.select.bind(this);
-}
+    }
 
-select(e) {
-    const mode = e.currentTarget.dataset.mode;
-    this.setState({ mode, contextOpened: false });
-}
+
+
+    async componentDidMount(){
+        const response = await PulseService.getAllPulseMessages(this.props.idGame)
+        this.setState({messages: response} )
+    }
+
+    // async sendMessage(id: string){
+    //     await PulseService.sendPulseMessage(this.props.idGame, id)
+    // }
+
+
+    select(e) {
+        const mode = e.currentTarget.dataset.mode;
+        this.setState({ mode, contextOpened: false });
+    }
+
+    async addMes(id: string) {
+        const pulseMessageResponse = await PulseService.sendPulseMessage(this.props.idGame, id);
+        this.setState({
+            text1: "",
+            messages: [pulseMessageResponse,...this.state.messages]
+        })
+    }
 
     render()
     {
@@ -76,7 +94,8 @@ select(e) {
 
                                 <WriteBarIcon
                                     mode="send"
-                                    disabled={this.state.text3.length === 0}
+                                    disabled={this.state.text1.length === 0}
+                                    onClick={() => this.addMes(this.state.text1)}
                                 />
                             </Fragment>
                         }
@@ -109,46 +128,12 @@ select(e) {
                 </Group>
 
                 <Group>
-                    <SimpleCell before={<Avatar size={48} src={image} />} after={<Icon28MoreHorizontal />} description="Команда ВКонтакте">Игорь Фёдоров</SimpleCell>
-                    <Text weight="regular" style={{ margin: 16 }}>Игра просто бомба! <br/><br/> Нашел новый глич, зацените какой он невероятный! Каждый день что-то новое, прошел ее уже раз 70.</Text>
-                    <div style={{
-                        position: "relative",
-                        backgroundColor: 'gray',
-                        margin: 16,
-                        height: 50,
-                        width: 100,
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                        paddingBottom: '6px',
-                        borderRadius: 25
-                    }}>
-                        <div style={{
-                            position:"absolute",
-                            top:"50%",
-                            left:"25%",
-                            transform: "translate(-50%, -50%)"
-                        }}>
-                            <Icon28SmileOutline/>
-                        </div>
-                        <div style={{
-                            position:"absolute",
-                            top:"50%",
-                            left:"50%",
-                            transform: "translate(-50%, -50%)"
-                        }}>
-                            <Icon28SmileOutline/>
-                        </div>
-                        <div style={{
-                            position:"absolute",
-                            top:"50%",
-                            left:"75%",
-                            transform: "translate(-50%, -50%)"
-                        }}>
-                            <Icon28SmileOutline/>
-                        </div>
-
-                    </div>
+                    {this.state.messages.length> 0 && this.state.messages.map((m) =>
+                        (<div>
+                            <SimpleCell before={<Avatar size={48} src={image} />} after={<Icon28MoreHorizontal />} description="Команда ВКонтакте">Игорь Фёдоров</SimpleCell>
+                            <Text weight="regular" style={{ margin: 16 }}>{m.message}</Text>
+                        </div>))
+                    }
                 </Group>
             </Group>
         )
@@ -156,4 +141,43 @@ select(e) {
 
 };
 
-export default PulsePage;
+ export default PulsePage
+
+
+ //<div style={{
+//     position: "relative",
+//         backgroundColor: 'gray',
+//         margin: 16,
+//         height: 50,
+//         width: 100,
+//         display: 'flex',
+//         alignItems: 'flex-end',
+//         justifyContent: 'center',
+//         paddingBottom: '6px',
+//         borderRadius: 25
+// }}>
+// <div style={{
+//     position:"absolute",
+//         top:"50%",
+//         left:"25%",
+//         transform: "translate(-50%, -50%)"
+// }}>
+// <Icon28SmileOutline/>
+// </div>
+// <div style={{
+//     position:"absolute",
+//         top:"50%",
+//         left:"50%",
+//         transform: "translate(-50%, -50%)"
+// }}>
+// <Icon28SmileOutline/>
+// </div>
+// <div style={{
+//     position:"absolute",
+//         top:"50%",
+//         left:"75%",
+//         transform: "translate(-50%, -50%)"
+// }}>
+// <Icon28SmileOutline/>
+// </div>
+// </div>
