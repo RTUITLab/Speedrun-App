@@ -73,7 +73,7 @@ const Rules = ({game}) => {
             <CardGrid>
                 <Card size="l">
                     {
-                        data.find(C => C.id = ruleName)?.rules?.split('\r').map(t => <Div style={{padding: '5px 10px'}}>{t}</Div>)
+                        data.find(C => C.id === ruleName)?.rules?.split('\r').map(t => <Div style={{padding: '5px 10px'}}>{t}</Div>)
                     }    
                 </Card>
             </CardGrid>
