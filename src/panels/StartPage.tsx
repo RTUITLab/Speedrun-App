@@ -13,6 +13,7 @@ import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable
 import './Persik.css';
 import mc from '../img/MineCraft.jpg';
 import { Game, Stream, StreamsService } from "../api";
+import { Div } from '@vkontakte/vkui';
 
 const StartPage = props => {
     const [streamsList, setStreamsList] = useState<Array<Stream> | null>(null);
@@ -78,7 +79,7 @@ const StartPage = props => {
                                             <SwipeableListItem
                                                 key={g.id}
                                                 swipeLeft={{
-                                                    content: <Cell>Удалить из избранного</Cell>,
+                                                    content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из избранного</Div></Cell>,
                                                     action: () => deleteGameFromFavourite(g.id || "")
                                                 }}
                                             >
