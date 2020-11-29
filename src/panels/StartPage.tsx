@@ -7,16 +7,21 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import CardGrid from '@vkontakte/vkui/dist/components/CardGrid/CardGrid';
 import Card from '@vkontakte/vkui/dist/components/Card/Card';
 import Header from '@vkontakte/vkui/dist/components/Header/Header';
-import { Avatar, Cell, CardScroll, Search, Spinner } from '@vkontakte/vkui'
+import {Avatar, Cell, CardScroll, Search, Spinner, View} from '@vkontakte/vkui'
 import { FavoriteService } from '../services/FavoritesService';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import mc from '../img/MineCraft.jpg';
 import { Game, Stream, StreamsService } from "../api";
 import { Div } from '@vkontakte/vkui';
+import GamePage from "./GamePage";
 
 const StartPage = props => {
     const [streamsList, setStreamsList] = useState<Array<Stream> | null>(null);
     const [favoriteGames, setFavoriteGames] = useState<Array<Game> | null>(null);
+
+    const [activeView, setActiveView] = useState<string>('main');
+    const [changeGame, setChangeGame] = useState<Game | null>(null);
+
     useEffect(() => {
         async function fetchGamesList() {
             if (streamsList == null) {
@@ -56,7 +61,8 @@ const StartPage = props => {
         return mc;
     }
     return (
-        <Panel id={props.id}>
+        <View id={props.id} activePanel={activeView}>
+        <Panel id='main'>
             <PanelHeader separator={false}>
                 Обзор спидранов
             </PanelHeader>
@@ -84,7 +90,10 @@ const StartPage = props => {
                                                 }}
                                             >
                                                 <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }}
-                                                    before={<Avatar mode="image" src={getLinkForGame(g)} />}>
+                                                    before={<Avatar mode="image" src={getLinkForGame(g)} />} onClick={() => {
+                                                    setChangeGame(g);
+                                                    setActiveView('gameInfo');
+                                                }}>
                                                     <div style={{ width: "100$", textAlign: "center" }}>
                                                         <div style={{ float: "left" }}>
                                                             {g.names?.international || "no name"}
@@ -158,6 +167,10 @@ const StartPage = props => {
             </Group>
             <Footer>Property of RTUITLab</Footer>
         </Panel>
+            <Panel id='gameInfo'>
+                <GamePage id='gameInfo' goTo={(a) => setActiveView('main')} game={{id: changeGame?.id, gameName: changeGame?.names?.international}} />
+            </Panel>
+        </View>
     );
 };
 

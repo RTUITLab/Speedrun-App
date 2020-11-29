@@ -5,6 +5,7 @@ import type { GameCompact } from '../api/models/GameCompact';
 import TopPage from './GameTab/TopPage';
 import { GamesService } from '../api';
 import Rules from './GameTab/Rules';
+import PulsePage from "./GameTab/PulsePage";
 import GidePage from './GameTab/GuidesPage'
 
 const GamePage = (props) => {
@@ -52,7 +53,8 @@ const GamePage = (props) => {
                 {{'top': <TopPage id={props.game.id} />,
                 'stream': <p>Stream</p>,
                 'rules': <Rules game={props.game}/>,
-                    'guid': <GidePage id={props.game.id}/>
+                    'guid': <GidePage id={props.game.id}/>,
+                    'pulse': <PulsePage/>
                 }[activeTab]
                 }
 
