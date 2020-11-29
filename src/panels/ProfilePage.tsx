@@ -6,7 +6,7 @@ import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
 import {SwipeableList, SwipeableListItem} from "@sandstreamdev/react-swipeable-list";
 import Group from "@vkontakte/vkui/dist/components/Group/Group";
-import {Game, StreamsService} from "../api";
+import {Game} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
 import {Icon24User} from "@vkontakte/icons";
@@ -87,7 +87,7 @@ const ProfilePage = (props) => {
                                             key={g.id}
                                             swipeLeft={{
                                                 content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из избранного</Div></Cell>,
-                                                action: () => deleteGameFromFavourite(g.id || "")
+                                                    action: () => deleteGameFromFavourite(g.id || "")
                                             }}
                                         >
                                             <Cell key={g.id} style={{marginTop: 0, marginLeft: 3}}
