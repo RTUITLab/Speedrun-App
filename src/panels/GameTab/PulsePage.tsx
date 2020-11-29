@@ -1,28 +1,17 @@
-import React, {Component, Dispatch, SetStateAction, useEffect,Fragment, useImperativeHandle, useRef, useState} from 'react';
+import React, {Fragment} from 'react';
 import {
-    Panel,
-    PanelHeader,
-    List,
-    Cell,
     Avatar,
-    Search,
-    PanelHeaderBack,
-    View,
-    Button,
     Text,
-    Group, WriteBar, WriteBarIcon, FixedLayout, Separator, Tabs, TabsItem, Counter, SimpleCell, UsersStack
+    Group, WriteBar, WriteBarIcon,Tabs, TabsItem, SimpleCell
 } from '@vkontakte/vkui';
 import {
-    Icon24Filter,
     Icon28CameraOutline,
-    Icon28KeyboardBotsOutline, Icon28MessageOutline,
     Icon28SmileOutline,
-    Icon28VoiceOutline
 } from '@vkontakte/icons';
 import image from '../MineCraft.jpg'
 import Icon28MoreHorizontal from '@vkontakte/icons/dist/28/more_horizontal';
-import {Game, GamesService, PulseMessageResponse, PulseService, Stream, StreamsService} from "../../api";
-import {FavoriteService} from "../../services/FavoritesService";
+import {PulseMessageResponse, PulseService} from "../../api";
+
 
 type PulseProps = {
     idGame: string
