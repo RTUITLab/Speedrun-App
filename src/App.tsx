@@ -8,7 +8,6 @@ import { Icon24Cancel, Icon28TextLiveOutline, Icon28GameOutline, Icon28Profile }
 import GamesList from './panels/GamesList';
 import Tournaments from './panels/Tournaments';
 import StartPage from "./panels/StartPage";
-import GuidesPage from "./panels/GuidesPage";
 
 import PlayVideo from "./panels/PlayVideo";
 import Persik from "./panels/Persik";
@@ -298,9 +297,6 @@ const App = () => {
 			</View>
 			<View id="persik" activePanel="persik" popout={popout}>
 				<Persik id='persik' go={goBack}/>
-			</View>
-			<View id="guadePage" activePanel="guadePage" popout={popout}>
-				<GuidesPage id='guadePage' goBack={goBack}/>
 			</View>
 		</Epic>
 	);

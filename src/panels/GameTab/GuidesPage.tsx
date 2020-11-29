@@ -1,20 +1,19 @@
 import React, { Component, Dispatch, SetStateAction, useImperativeHandle } from 'react';
-import logo from '../logo.svg'
-import image from './MineCraft.jpg'
-import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack, View, Button, Text} from '@vkontakte/vkui';
+import logo from '../../logo.svg'
+import image from '../MineCraft.jpg'
+import {Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack, View, Button, Group} from '@vkontakte/vkui';
 import Icon20FavoriteOutline from '@vkontakte/icons/dist/20/favorite_outline';
 import Icon12OnlineVkmobile from '@vkontakte/icons/dist/12/online_vkmobile';
 import Icon20FavoriteCircleFillYellow from '@vkontakte/icons/dist/20/favorite_circle_fill_yellow';
 
-import GamePage from './GamePage'
+import GamePage from '../GamePage'
 
-import { GamesService } from '../api/services/GamesService';
-import type { GameCompact } from '../api/models/GameCompact';
+import { GamesService } from '../../api/services/GamesService';
+import type { GameCompact } from '../../api/models/GameCompact';
 import { Icon24Filter } from '@vkontakte/icons';
 
 type GuidesPageProps = {
-    id: string,
-    goBack: (e: any) => void,
+    id: string
 }
 
 type GuidesPageState = {
@@ -50,10 +49,6 @@ class GuidesPage extends Component<GuidesPageProps, GuidesPageState> {
         this.setState({gameTitle: e.target.value.toLowerCase()});
     };
 
-    goBack(str: string) {
-        this.setState({activeView: str});
-    }
-
     changeStar(el: number){
         var tmp = [...this.state.guides];
         tmp[el] = !tmp[el];
@@ -62,13 +57,7 @@ class GuidesPage extends Component<GuidesPageProps, GuidesPageState> {
 
     render() {
     return (
-        <View id={this.props.id} activePanel={this.state.activeView}>
-        <Panel id='list'>
-
-            <PanelHeader
-                left={<PanelHeaderBack onClick={this.props.goBack} data-to="startPage" />}>
-                Игры
-            </PanelHeader>
+        <Group>
             <Search autoFocus onChange={(e) => this.onChange(e)} icon={<Icon24Filter/>}
                     onIconClick={() => {}}/>
 
@@ -104,12 +93,9 @@ class GuidesPage extends Component<GuidesPageProps, GuidesPageState> {
                     {g.title}
                 </Cell>)}
             </List>
-        </Panel>
-            <Panel id='test'>
-                <GamePage id='test' goTo={(a) => this.goBack(a)} game={this.state.setGame}/>
-            </Panel>
-        </View>);
+        </Group>)
     }
+
 
 }
 
