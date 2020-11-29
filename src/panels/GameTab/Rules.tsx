@@ -12,7 +12,7 @@ type User = {
 
 const Rules = ({game}) => {
     const [data, setData] = useState<Array<Category>>([]);
-    const [ruleName, setRuleName] = useState<any>();
+    const [ruleName, setRuleName] = useState<string>('');
     const [moedrators, setModerators] = useState<Array<User>>([]);
 
     useEffect(() => {
@@ -27,6 +27,7 @@ const Rules = ({game}) => {
     });
 
     const fetchModerators = async (id: string) => {
+        if (!id) return;
         let moders = await GamesService.getModeratorsIds(game.id, id);
         console.log(moders);
         
@@ -40,6 +41,14 @@ const Rules = ({game}) => {
         setModerators(m);
     }
 
+    const onChange = e => {
+        if (e.currentTarget.key = "category") {
+            setRuleName(e.currentTarget.value);
+            fetchModerators(e.currentTarget.value);
+            console.log(e.currentTarget.value);
+        }
+    }
+
     return (
         <Div style={{paddingTop: 0}}>
         <FormLayout>
@@ -47,7 +56,8 @@ const Rules = ({game}) => {
 				top="Категория"
                 placeholder="Выбрать категорию"
                 value={ruleName}
-                onChange={(e) => { setRuleName(e.currentTarget.value); fetchModerators(e.currentTarget.value) }}
+                onChange={onChange}
+                name="category"
             >
                 {
                     data.map(c => (
@@ -72,7 +82,7 @@ const Rules = ({game}) => {
             <List>
                 {
                     moedrators.map(m => (
-                        <Cell before={<Avatar src={m.photo_200}/>}>{m.name}</Cell>
+                        <a href={m.url} target="_blanc"><Cell before={<Avatar src={m.photo_200}/>}>{m.name}</Cell></a>
                     ))
                 }
             </List>
