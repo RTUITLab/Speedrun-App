@@ -8,12 +8,16 @@ GET {{host}}/api/games
 
 # @name categories
 # GET {{host}}/api/games/{{compactGames.response.body.0.id}}/categories
-GET {{host}}/api/games/mc/categories
+GET {{host}}/api/games/portal/categories
 
 ###
 
 # @name leaderboard
-GET {{host}}/api/leaderboards/{{compactGames.response.body.0.id}}/{{categories.response.body.0.id}}/
+GET {{host}}/api/leaderboards/j1npme6p/mkeyl926
+https://www.speedrun.com/api/v1/leaderboards/j1npme6p/category/mkeyl926?embed=players&top=100
+
+###
+https://www.speedrun.com/api/v1/leaderboards/j1npme6p/category/mkeyl926?embed=players&embed=platforms&top=10
 
 ###
 GET {{host}}/api/tournament
@@ -23,3 +27,40 @@ GET {{host}}/api/tournament
 ###
 https://www.speedrun.com/api/v1/games/j1npme6p
 
+###
+https://www.speedrun.com/api/v1/categories/mkeyl926/variables
+
+
+###
+{{host}}/api/games/moderators/mc/mkeyl926
+
+
+###
+GET {{host}}/api/pulse/mc
+
+###
+GET {{host}}/api/pulse/mc/runners
+
+###
+POST {{host}}/api/pulse/mc
+Content-Type: application/json
+userid: 73739616
+
+"Hello dvsevse"
+
+
+###
+GET {{host}}/api/account/isrunner
+userid: 73739616
+
+###
+POST {{host}}/api/account/isrunner
+userid: 73739616
+Content-Type: application/json
+
+true
+
+
+###
+
+GET {{host}}/api/tournament

@@ -2,21 +2,23 @@
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    margin: 0 5px;
 }
 
 #customers td, #customers th {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 5px;
+    font-size: smaller;
+    text-align: center;
 }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers td {
+    color: var(--text_primary);
+}
 
-#customers tr:hover {background-color: #ddd;}
+#customers tr:nth-child(even){background-color: var(--background_page);}
 
 #customers th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    /*background-color: val(--head);*/
 }

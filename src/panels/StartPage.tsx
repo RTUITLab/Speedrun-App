@@ -7,12 +7,12 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import CardGrid from '@vkontakte/vkui/dist/components/CardGrid/CardGrid';
 import Card from '@vkontakte/vkui/dist/components/Card/Card';
 import Header from '@vkontakte/vkui/dist/components/Header/Header';
-import { Avatar, Cell, CardScroll, Search } from '@vkontakte/vkui'
+import { Avatar, Cell, CardScroll, Search, Spinner } from '@vkontakte/vkui'
 import { FavoriteService } from '../services/FavoritesService';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import './Persik.css';
 import mc from '../img/MineCraft.jpg';
 import { Game, Stream, StreamsService } from "../api";
+import { Div } from '@vkontakte/vkui';
 
 const StartPage = props => {
     const [streamsList, setStreamsList] = useState<Array<Stream> | null>(null);
@@ -56,7 +56,7 @@ const StartPage = props => {
     }
     return (
         <Panel id={props.id}>
-            <PanelHeader>
+            <PanelHeader separator={false}>
                 Обзор спидранов
             </PanelHeader>
 
@@ -70,30 +70,40 @@ const StartPage = props => {
                             <Header mode="secondary" style={{ float: "right" }}>Any%</Header>
                         </div>
 
-                        <div style={{ height: 300 }}>
-                            <SwipeableList>
-                                {favoriteGames && favoriteGames.map(g =>
-                                    <SwipeableListItem
-                                        key={g.id}
-                                        swipeLeft={{
-                                            content: <Cell>Удалить из избранного</Cell>,
-                                            action: () => deleteGameFromFavourite(g.id || "")
-                                        }}
-                                    >
-                                        <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={getLinkForGame(g)} />}>
-                                            <div style={{ width: "100$", textAlign: "center" }}>
-                                                <div style={{ float: "left" }}>
-                                                    {g.names?.international || "no name"}
-                                            </div>
-                                                <div style={{ float: "right" }}>
-                                                    <div style={{ fontSize: "16px" }}>13m 54c</div>
-                                                    <div style={{ fontSize: "12px" }}>-22s</div>
-                                                </div>
-                                            </div>
-                                        </Cell>
-                                    </SwipeableListItem>
-                                )}
-                            </SwipeableList>
+                        <div>
+                            {favoriteGames &&
+                                <SwipeableList>
+                                    {
+                                        favoriteGames.map(g =>
+                                            <SwipeableListItem
+                                                key={g.id}
+                                                swipeLeft={{
+                                                    content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из избранного</Div></Cell>,
+                                                    action: () => deleteGameFromFavourite(g.id || "")
+                                                }}
+                                            >
+                                                <Cell key={g.id} style={{ marginTop: 0, marginLeft: 3 }}
+                                                    before={<Avatar mode="image" src={getLinkForGame(g)} />}>
+                                                    <div style={{ width: "100$", textAlign: "center" }}>
+                                                        <div style={{ float: "left" }}>
+                                                            {g.names?.international || "no name"}
+                                                        </div>
+                                                        <div style={{ float: "right" }}>
+                                                            <div style={{ fontSize: "16px" }}>13m 54c</div>
+                                                            <div style={{ fontSize: "12px" }}>-22s</div>
+                                                        </div>
+                                                    </div>
+                                                </Cell>
+                                            </SwipeableListItem>
+                                        )
+                                    }
+                                </SwipeableList>
+                            }
+                            {favoriteGames?.length === 0 && <Cell>
+                                Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
+                                свайп вправо!
+                            </Cell>}
+                            {!favoriteGames && <Cell style={{ textAlign: "center" }}><Spinner/></Cell>}
                         </div>
                     </Card>
                 </CardGrid>

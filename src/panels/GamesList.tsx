@@ -1,6 +1,6 @@
-import React, { Component, Dispatch, SetStateAction, useImperativeHandle } from 'react';
+import React, { Component, Dispatch, SetStateAction } from 'react';
 import logo from '../logo.svg'
-import { Panel, PanelHeader, List, Cell, Avatar, Search, PanelHeaderBack, View, Card } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Cell, Avatar, Search, PanelHeaderBack, View } from '@vkontakte/vkui';
 
 import GamePage from './GamePage'
 
@@ -11,6 +11,7 @@ import { Icon24Filter } from '@vkontakte/icons';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import './GameList.css'
 import { FavoriteService } from '../services/FavoritesService';
+import { Div } from '@vkontakte/vkui';
 
 type GamesListProps = {
     id: string,
@@ -73,7 +74,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
             <View id={this.props.id} activePanel={this.state.activeView}>
                 <Panel id='list'>
 
-                    <PanelHeader
+                    <PanelHeader separator={false}
                         left={<PanelHeaderBack onClick={this.props.goBack} data-to="startPage" />}>
                         Игры
             </PanelHeader>
@@ -87,7 +88,7 @@ class GamesList extends Component<GamesListProps, GamesListState> {
                                 <SwipeableListItem
                                     key={g.id}
                                     swipeRight={{
-                                        content: <Cell>Добавить в избранное</Cell>,
+                                        content: <Cell><Div style={{color: '#3f8adf'}}>Добавить в избранное</Div></Cell>,
                                         action: () => this.addGameToFavorites(g.id || "")
                                     }}
                                     >

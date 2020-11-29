@@ -25,7 +25,7 @@ export class FavoriteService {
     }
 
     public static async getFavoriteGames(): Promise<Array<GameCompact>> {
-        const ids = await (await this.getFavoriteGameIds()).slice(0,4);
+        const ids = await (await this.getFavoriteGameIds());
         return await GamesService.getGamesById(ids);
     }
 
