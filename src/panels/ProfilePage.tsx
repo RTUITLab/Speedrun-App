@@ -109,7 +109,6 @@ const ProfilePage = (props) => {
             newList.push(G.id || '');
         });
         await FavoriteService.setFavoriteGames(newList);
-        const saved = await FavoriteService.getFavoriteGameIds();
 
         setFavoriteGames(favoriteGames!.filter(G => G.id !== id));
     }

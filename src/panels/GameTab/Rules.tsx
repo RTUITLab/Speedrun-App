@@ -42,7 +42,7 @@ const Rules = ({game}) => {
     }
 
     const onChange = e => {
-        if (e.currentTarget.key = "category") {
+        if (e.currentTarget.key === "category") {
             setRuleName(e.currentTarget.value);
             fetchModerators(e.currentTarget.value);
             console.log(e.currentTarget.value);

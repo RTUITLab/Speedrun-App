@@ -1,4 +1,4 @@
-import { Avatar, Card, CardScroll, Cell, Div, Group, Header } from "@vkontakte/vkui";
+import { Avatar, Card, CardScroll, Cell, Group, Header } from "@vkontakte/vkui";
 import { useEffect, useState } from "react";
 import { Stream, StreamsService } from "../../api";
 
