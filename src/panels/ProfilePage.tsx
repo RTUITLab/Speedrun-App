@@ -74,7 +74,7 @@ const ProfilePage = (props) => {
                                         <SwipeableListItem
                                             key={g.id}
                                             swipeLeft={{
-                                                content: <Cell>Удалить из избранного</Cell>,
+                                                content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из избранного</Div></Cell>,
                                                 action: () => deleteGameFromFavourite(g.id || "")
                                             }}
                                         >
