@@ -11,7 +11,7 @@ const StreamPage = ({id}) => {
             if (streamsList == null) {
                 const data = await StreamsService.getStreams()
                 setStreamsList(() => data);
-                console.log(data);
+                setCurrentStream(data[0].twichUrl);
             }
         }
 
