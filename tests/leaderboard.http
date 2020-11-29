@@ -67,3 +67,22 @@ GET {{host}}/api/tournament
 
 ###
 GET {{host}}/api/runs
+
+###
+GET {{host}}/api/games/byids?ids=j1npme6p
+
+
+###
+POST {{host}}/api/pulse/subscribetouser/11753568
+userid: 73739616
+###
+POST {{host}}/api/pulse/unsubsribefromuser/210813066
+userid: 73739616
+
+###
+GET {{host}}/api/pulse/getmysubscriptions
+userid: 73739616
+
+###
+GET {{host}}/api/pulse/getmysubscribers
+userid: 73739616
