@@ -139,6 +139,7 @@ const ProfilePage = (props) => {
                 </HorizontalScroll>
             </Group>
             <Group  header={<Header mode="secondary">Слежу за</Header>} separator="hide">
+                <HorizontalScroll>
                 <div style={{ display: 'flex' }}>
                     <div style={{ ...itemStyle, paddingLeft: 4 }}>
                         <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
@@ -173,6 +174,7 @@ const ProfilePage = (props) => {
                         Вадим
                     </div>
                 </div>
+                </HorizontalScroll>
             </Group>
 
             <Banner
