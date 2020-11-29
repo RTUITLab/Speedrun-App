@@ -10,7 +10,6 @@ import Header from '@vkontakte/vkui/dist/components/Header/Header';
 import { Avatar, Cell, CardScroll, Search, Spinner } from '@vkontakte/vkui'
 import { FavoriteService } from '../services/FavoritesService';
 import { SwipeableList, SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import './Persik.css';
 import mc from '../img/MineCraft.jpg';
 import { Game, Stream, StreamsService } from "../api";
 import { Div } from '@vkontakte/vkui';
@@ -57,7 +56,7 @@ const StartPage = props => {
     }
     return (
         <Panel id={props.id}>
-            <PanelHeader>
+            <PanelHeader separator={false}>
                 Обзор спидранов
             </PanelHeader>
 
@@ -71,7 +70,7 @@ const StartPage = props => {
                             <Header mode="secondary" style={{ float: "right" }}>Any%</Header>
                         </div>
 
-                        <div style={{ height: 340 }}>
+                        <div>
                             {favoriteGames &&
                                 <SwipeableList>
                                     {
@@ -100,7 +99,10 @@ const StartPage = props => {
                                     }
                                 </SwipeableList>
                             }
-                            {favoriteGames?.length === 0 && <Cell style={{ textAlign: "center" }}>Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте свайп вправо!</Cell>}
+                            {favoriteGames?.length === 0 && <Cell>
+                                Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
+                                свайп вправо!
+                            </Cell>}
                             {!favoriteGames && <Cell style={{ textAlign: "center" }}><Spinner/></Cell>}
                         </div>
                     </Card>
