@@ -133,7 +133,7 @@ const StartPage = props => {
                     <CardScroll>
                         {streamsList &&
                             streamsList.map(s =>
-                                <Card key={s.id} size="s">
+                                <Card key={s.id} size="s" onClick={() => props.goTo('video', s.twichUrl, 'startPage')}>
                                     <div style={{ width: 224, height: 225 }}>
                                         <img alt='previewImg' style={{ objectFit: "cover", borderRadius: 5, width: 224, height: 135 }} src={s?.previewImage || mc} />
                                         <Cell style={{ marginTop: 0, marginLeft: 3 }} before={<Avatar mode="image" src={s?.gameCoverImage || mc} />}>
