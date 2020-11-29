@@ -82,11 +82,9 @@ const TopPage = (props) => {
             place: r.place+'',
             name: (r.run?.players ? r.run?.players[0].name : "") || "",
             time: (r.run?.times.prettyTime) || "",
-            platform: lb?.platform+'',
-            old: r
+            platform: lb?.platform+''
         })) as leadbordTest[];
         setTestA(data);
-        console.log(data);
     }
 
     const columns = React.useMemo(

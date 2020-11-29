@@ -6,7 +6,7 @@ import Card from "@vkontakte/vkui/dist/components/Card/Card";
 import Header from "@vkontakte/vkui/dist/components/Header/Header";
 import {SwipeableList, SwipeableListItem} from "@sandstreamdev/react-swipeable-list";
 import Group from "@vkontakte/vkui/dist/components/Group/Group";
-import {AccountService, Game, GamesService} from "../api";
+import {AccountService, Game, GamesService, PulseService} from "../api";
 import {FavoriteService} from "../services/FavoritesService";
 import mc from "../img/MineCraft.jpg";
 import {Icon24User} from "@vkontakte/icons";
@@ -25,7 +25,9 @@ const ProfilePage = (props) => {
     const [checkBox, setCheckBox] = useState<boolean>(false);
     const [changeGame, setChangeGame] = useState<Game | null>(null);
 
-    const [moedrators, setModerators] = useState<Array<User>>([]);
+    const [subscriptions, setSubscriptions] = useState<Array<User>>([]);
+    const [subscribers, setSubscribers] = useState<Array<User>>([]);
+
 
     const onChangeToCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -53,7 +55,6 @@ const ProfilePage = (props) => {
         async function fetchGamesList() {
 
 
-
             if (favoriteGames == null) {
                 const data = await FavoriteService.getFavoriteGames();
 
@@ -63,18 +64,40 @@ const ProfilePage = (props) => {
 
 
         fetchGamesList().then(r => console.log("Done"));
-        fetchModerators()
+        fetchSubscriptions();
     })
 
-    const fetchModerators = async () => {
+    const fetchSubscriptions = async () => {
+        const subscriptions = await PulseService.getMySubscriptions();
+        const subscribers = await PulseService.getMySubscribers();
         const token = await (await bridge.send("VKWebAppGetAuthToken", {"app_id": 7679570, "scope": ""})).access_token;
 
-        const responce = (await bridge.send("VKWebAppCallAPIMethod", {"method": "users.get", "params":  {"user_ids": '73739616', "v":"5.126", "access_token": token, "fields": "photo_200"}})).response;
-        let m: Array<User> = [];
-        responce.forEach(user => {
-            m.push({name: [user.first_name, user.last_name].join(' '), photo_200: user.photo_200, url: "https://vk.com/id"+user.id });
+        const responce1 = (await bridge.send("VKWebAppCallAPIMethod", {
+            "method": "users.get",
+            "params": {"user_ids": subscriptions.join(','), "v": "5.126", "access_token": token, "fields": "photo_200"}
+        })).response;
+        const responce2 = (await bridge.send("VKWebAppCallAPIMethod", {
+            "method": "users.get",
+            "params": {"user_ids": subscribers.join(','), "v": "5.126", "access_token": token, "fields": "photo_200"}
+        })).response;
+        let m1: Array<User> = [];
+        let m2: Array<User> = [];
+        responce1.forEach(user => {
+            m1.push({
+                name: [user.first_name, user.last_name].join(' '),
+                photo_200: user.photo_200,
+                url: "https://vk.com/id" + user.id
+            });
         });
-        setModerators(m)
+        responce2.forEach(user => {
+            m2.push({
+                name: [user.first_name, user.last_name].join(' '),
+                photo_200: user.photo_200,
+                url: "https://vk.com/id" + user.id
+            });
+        });
+        setSubscriptions(m1);
+        setSubscribers(m2);
     }
 
     async function deleteGameFromFavourite(id: string): Promise<void> {
@@ -101,145 +124,124 @@ const ProfilePage = (props) => {
 
     return (
         <View id={props.id} activePanel={activeView}>
-        <Panel id='profile'>
-            <PanelHeader>Профиль</PanelHeader>
-            <Group separator="hide">
-                <CardGrid>
-                    <Card size="l">
-                        <div>
-                            <Header mode="secondary">Избранные игры</Header>
-                        </div>
-                        <Div>
-                            {favoriteGames && favoriteGames.length > 0 && (
-                                <SwipeableList>
-                                    {favoriteGames && favoriteGames.map(g =>
-                                        <SwipeableListItem
-                                            key={g.id}
-                                            swipeLeft={{
-                                                content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из избранного</Div></Cell>,
+            <Panel id='profile'>
+                <PanelHeader>Профиль</PanelHeader>
+                <Group separator="hide">
+                    <CardGrid>
+                        <Card size="l">
+                            <div>
+                                <Header mode="secondary">Избранные игры</Header>
+                            </div>
+                            <Div>
+                                {favoriteGames && favoriteGames.length > 0 && (
+                                    <SwipeableList>
+                                        {favoriteGames && favoriteGames.map(g =>
+                                            <SwipeableListItem
+                                                key={g.id}
+                                                swipeLeft={{
+                                                    content: <Cell><Div style={{color: '#ff5c5c'}}>Удалить из
+                                                        избранного</Div></Cell>,
                                                     action: () => deleteGameFromFavourite(g.id || "")
-                                            }}
-                                        >
-                                            <Cell key={g.id} style={{marginTop: 0, marginLeft: 3}}
-                                                  before={<Avatar mode="image" src={getLinkForGame(g)}/>} onClick={() => {
-                                                      setChangeGame(g);
-                                                      setActiveView('gameInfo');
-                                            }}>
-                                                <div style={{width: "100$", textAlign: "center"}}>
-                                                    <div style={{float: "left"}}>
-                                                        {g.names?.international || "no name"}
+                                                }}
+                                            >
+                                                <Cell key={g.id} style={{marginTop: 0, marginLeft: 3}}
+                                                      before={<Avatar mode="image" src={getLinkForGame(g)}/>}
+                                                      onClick={() => {
+                                                          setChangeGame(g);
+                                                          setActiveView('gameInfo');
+                                                      }}>
+                                                    <div style={{width: "100$", textAlign: "center"}}>
+                                                        <div style={{float: "left"}}>
+                                                            {g.names?.international || "no name"}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Cell>
-                                        </SwipeableListItem>
-                                    )}
-                                </SwipeableList>
-                            ) || (
-                                <Group>
-                                    Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
-                                    свайп вправо!
-                                </Group>
-                            )}
+                                                </Cell>
+                                            </SwipeableListItem>
+                                        )}
+                                    </SwipeableList>
+                                ) || (
+                                    <Group>
+                                        Вы еще не добавили игры в избранное. Найдите то, что вам по душе и сделайте
+                                        свайп вправо!
+                                    </Group>
+                                )}
 
-                        </Div>
-                    </Card>
-                </CardGrid>
-            </Group>
-            <Group  header={<Header mode="secondary">{checkBox ? "Мои доны" : "Помогаю"}</Header>} separator="hide">
-                <HorizontalScroll>
-                    <div style={{ display: 'flex' }}>
-                        {
-                            moedrators.map(m => (
-                                <div style={{ ...itemStyle, paddingLeft: 4 , textAlign: 'center'}}>
-                                    <Avatar size={64} style={{ marginBottom: 8 }} src={m.photo_200}> </Avatar>
-                                    {m.name}
-                                </div>
-                            ))
-                        }
-                    </div>
-                </HorizontalScroll>
-            </Group>
-            <Group  header={<Header mode="secondary">Слежу за</Header>} separator="hide">
-                <HorizontalScroll>
-                <div style={{ display: 'flex' }}>
-                    <div style={{ ...itemStyle, paddingLeft: 4 }}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Элджей
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Ольга
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Сергей
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Илья
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Алексей
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Костя
-                    </div>
-                    <div style={itemStyle}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Миша
-                    </div>
-                    <div style={{ ...itemStyle, paddingRight: 4 }}>
-                        <Avatar size={64} style={{ marginBottom: 8 }}><Icon24User /></Avatar>
-                        Вадим
-                    </div>
-                </div>
-                </HorizontalScroll>
-            </Group>
+                            </Div>
+                        </Card>
+                    </CardGrid>
+                </Group>
+                <Group header={<Header mode="secondary">{checkBox ? "Мои доны" : "Помогают"}</Header>} separator="hide">
+                    <HorizontalScroll>
+                        <div style={{display: 'flex'}}>
+                            {
+                                subscribers.map(m => (
+                                    <div style={{...itemStyle, paddingLeft: 4, textAlign: 'center'}}>
+                                        <Avatar size={64} style={{marginBottom: 8}} src={m.photo_200}> </Avatar>
+                                        {m.name}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </HorizontalScroll>
+                </Group>
+                <Group header={<Header mode="secondary">Слежу за</Header>} separator="hide">
+                    <HorizontalScroll>
+                        <div style={{display: 'flex'}}>
+                            {
+                                subscriptions.map(m => (
+                                    <div style={{...itemStyle, paddingLeft: 4, textAlign: 'center'}}>
+                                        <Avatar size={64} style={{marginBottom: 8}} src={m.photo_200}> </Avatar>
+                                        {m.name}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </HorizontalScroll>
+                </Group>
 
-            <Banner
-                mode="image"
-                header="Избранные гайды"
-                subheader="Здесь хранятся понравившиеся вам гайды по гличам и скипам в играх."
-                background={
-                    <div
-                        style={{
-                            backgroundColor: '#3e96ff',
-                        }}
-                    />
-                }
-            />
-
-            {checkBox && (
                 <Banner
                     mode="image"
-                    header="Мои гайды"
+                    header="Избранные гайды"
                     subheader="Здесь хранятся понравившиеся вам гайды по гличам и скипам в играх."
                     background={
                         <div
                             style={{
-                                backgroundColor: '#7c3eff',
-                                backgroundImage: 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/WPSU_Barnstar.svg/216px-WPSU_Barnstar.svg.png)',
-                                backgroundPosition: 'right center',
-                                backgroundSize: 50,
-                                backgroundRepeat: 'no-repeat',
-
+                                backgroundColor: '#3e96ff',
                             }}
                         />
                     }
                 />
-            )}
 
-            <Group>
-                <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox} />}>
-                    Я раннер
-                </Cell>
+                {checkBox && (
+                    <Banner
+                        mode="image"
+                        header="Мои гайды"
+                        subheader="Здесь хранятся понравившиеся вам гайды по гличам и скипам в играх."
+                        background={
+                            <div
+                                style={{
+                                    backgroundColor: '#7c3eff',
+                                    backgroundImage: 'url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/WPSU_Barnstar.svg/216px-WPSU_Barnstar.svg.png)',
+                                    backgroundPosition: 'right center',
+                                    backgroundSize: 50,
+                                    backgroundRepeat: 'no-repeat',
 
-            </Group>
-        </Panel>
+                                }}
+                            />
+                        }
+                    />
+                )}
+
+                <Group>
+                    <Cell asideContent={<Switch onChange={onChangeToCheckBox} checked={checkBox}/>}>
+                        Я раннер
+                    </Cell>
+
+                </Group>
+            </Panel>
             <Panel id='gameInfo'>
-                <GamePage id='gameInfo' goTo={(a) => setActiveView('profile')} game={{id: changeGame?.id, gameName: changeGame?.names?.international}} />
+                <GamePage id='gameInfo' goTo={(a) => setActiveView('profile')}
+                          game={{id: changeGame?.id, gameName: changeGame?.names?.international}}/>
             </Panel>
         </View>
     )
