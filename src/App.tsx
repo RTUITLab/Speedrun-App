@@ -267,7 +267,7 @@ const App = () => {
 	return (
 		<Epic activeStory={activePanel} tabbar={
 			<Tabbar>
-				<TabbarItem onClick={setStore} selected={activePanel === "tournaments"} text="Турниры" data-story="tournaments">
+				<TabbarItem onClick={setStore} selected={activePanel === "tournament"} text="Турниры" data-story="tournament">
 					<Icon28TextLiveOutline />
 				</TabbarItem>
 				<TabbarItem onClick={setStore} selected={activePanel === "startPage" || activePanel === "gameList"} text="Общее" data-story="startPage">
@@ -289,7 +289,7 @@ const App = () => {
 					ref={gamesRef}
 				/>
 			</View>
-			<View id="tournaments" activePanel='tournament' popout={popout}>
+			<View id="tournament" activePanel='tournament' popout={popout}>
 				<Tournaments id='tournament' go={goTour} />
 			</View>
 			<View id="startPage" activePanel="startPage" popout={popout}>
